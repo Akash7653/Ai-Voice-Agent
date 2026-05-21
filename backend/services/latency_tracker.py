@@ -106,7 +106,7 @@ class LatencyMonitor:
             report = tracker.get_report()
             
             # Save individual component metrics
-            from backend.models.models import LatencyMetric
+            frommodels.models import LatencyMetric
             
             for component, duration in report["breakdown"].items():
                 metric = LatencyMetric(

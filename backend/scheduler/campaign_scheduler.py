@@ -21,7 +21,7 @@ class CampaignScheduler:
     
     async def initialize(self):
         """Initialize scheduler and database connection"""
-        from backend.db.database import AsyncSessionLocal
+        fromdb.database import AsyncSessionLocal
         self.SessionLocal = AsyncSessionLocal
         self.scheduler.start()
         logger.info("Campaign scheduler initialized")
@@ -50,7 +50,7 @@ class CampaignScheduler:
         """Send appointment reminders"""
         try:
             async with self.SessionLocal() as session:
-                from backend.models.models import Appointment, AppointmentStatus, CampaignTask, CampaignStatus
+                frommodels.models import Appointment, AppointmentStatus, CampaignTask, CampaignStatus
                 
                 # Find appointments in 24 hours
                 tomorrow = datetime.utcnow() + timedelta(hours=24)
@@ -96,7 +96,7 @@ class CampaignScheduler:
         """Send follow-up campaigns"""
         try:
             async with self.SessionLocal() as session:
-                from backend.models.models import Appointment, AppointmentStatus, CampaignTask, CampaignStatus
+                frommodels.models import Appointment, AppointmentStatus, CampaignTask, CampaignStatus
                 
                 # Find completed appointments from 3 days ago
                 three_days_ago = datetime.utcnow() - timedelta(days=3)

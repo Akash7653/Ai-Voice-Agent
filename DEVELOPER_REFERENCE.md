@@ -199,7 +199,7 @@ curl http://localhost:8000/health
 
 # Database connection
 docker-compose exec backend python -c "
-from backend.db.database import AsyncSessionLocal
+from db.database import AsyncSessionLocal
 print('Database: OK')
 "
 
@@ -264,7 +264,7 @@ wscat -c ws://localhost:8000/ws/voice/patient_001
 
 ### Latency Measurement
 ```python
-from backend.services.latency_tracker import LatencyTracker
+from services.latency_tracker import LatencyTracker
 
 tracker = LatencyTracker(session_id)
 tracker.start("component_name")

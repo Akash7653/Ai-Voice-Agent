@@ -32,7 +32,7 @@ class AppointmentTools:
         Check doctor availability
         Returns available slots
         """
-        from backend.models.models import DoctorSchedule
+        frommodels.models import DoctorSchedule
         
         try:
             # Query for available doctors
@@ -89,7 +89,7 @@ class AppointmentTools:
         """
         Book an appointment
         """
-        from backend.models.models import Appointment, DoctorSchedule, AppointmentStatus
+        frommodels.models import Appointment, DoctorSchedule, AppointmentStatus
         
         try:
             # Validate appointment details
@@ -164,7 +164,7 @@ class AppointmentTools:
         """
         Reschedule an existing appointment
         """
-        from backend.models.models import Appointment, AppointmentStatus
+        frommodels.models import Appointment, AppointmentStatus
         import uuid
         
         try:
@@ -237,7 +237,7 @@ class AppointmentTools:
         """
         Cancel an appointment
         """
-        from backend.models.models import Appointment, AppointmentStatus
+        frommodels.models import Appointment, AppointmentStatus
         import uuid
         
         try:

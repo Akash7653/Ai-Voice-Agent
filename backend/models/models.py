@@ -8,7 +8,7 @@ from sqlalchemy.dialects.postgresql import TIMESTAMP, UUID
 import uuid
 import enum
 
-from backend.db.database import Base
+fromdb.database import Base
 
 class AppointmentStatus(str, enum.Enum):
     SCHEDULED = "scheduled"

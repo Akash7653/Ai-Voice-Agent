@@ -91,7 +91,7 @@ export OPENAI_API_KEY=sk-...
 # redis-server
 
 # Initialize database
-python -c "from backend.db.database import Base, engine; Base.metadata.create_all(bind=engine)"
+python -c "fromdb.database import Base, engine; Base.metadata.create_all(bind=engine)"
 
 # Run server
 python -m uvicorn main:app --reload --host 0.0.0.0 --port 8000
@@ -259,7 +259,7 @@ curl http://localhost:8000/health
 ```bash
 # Test from backend container
 docker-compose exec backend python -c "
-from backend.db.database import AsyncSessionLocal
+fromdb.database import AsyncSessionLocal
 print('Database connection: OK')
 "
 ```

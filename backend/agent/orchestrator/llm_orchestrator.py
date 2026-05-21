@@ -152,7 +152,7 @@ class LLMOrchestrator:
         """
         Execute appropriate tool based on reasoning
         """
-        from backend.tools.appointment_tools import AppointmentTools
+        from tools.appointment_tools import AppointmentTools
 
         try:
             if not self.db_session:

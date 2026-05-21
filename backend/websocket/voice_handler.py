@@ -8,11 +8,11 @@ from typing import Dict, Any, Optional
 import uuid
 from fastapi import WebSocket, WebSocketDisconnect
 
-from backend.services.stt_service import STTService, TTSService
-from backend.services.language_detection import LanguageDetectionService
-from backend.agent.orchestrator.llm_orchestrator import LLMOrchestrator
-from backend.memory.session_memory import RedisMemoryManager, PersistentMemoryManager
-from backend.services.latency_tracker import LatencyTracker
+fromservices.stt_service import STTService, TTSService
+fromservices.language_detection import LanguageDetectionService
+fromagent.orchestrator.llm_orchestrator import LLMOrchestrator
+frommemory.session_memory import RedisMemoryManager, PersistentMemoryManager
+fromservices.latency_tracker import LatencyTracker
 
 logger = logging.getLogger(__name__)
 
@@ -284,7 +284,7 @@ class VoiceAgentWebSocketHandler:
     ):
         """Log conversation to database"""
         try:
-            from backend.models.models import ConversationLog
+            frommodels.models import ConversationLog
             
             log = ConversationLog(
                 session_id=session_id,

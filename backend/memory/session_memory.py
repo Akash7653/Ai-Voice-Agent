@@ -101,7 +101,7 @@ class PersistentMemoryManager:
         conversation_summary: Optional[str] = None
     ) -> bool:
         """Save or update patient memory"""
-        from backend.models.models import PatientMemory
+        frommodels.models import PatientMemory
         from sqlalchemy import select
         
         try:
@@ -138,7 +138,7 @@ class PersistentMemoryManager:
     
     async def get_patient_memory(self, patient_id: str) -> Optional[Dict[str, Any]]:
         """Retrieve patient memory"""
-        from backend.models.models import PatientMemory
+        frommodels.models import PatientMemory
         from sqlalchemy import select
         
         try:

@@ -13,10 +13,10 @@ from fastapi import FastAPI, WebSocket, Depends, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from backend.db.database import init_db, close_db, get_db
-from backend.websocket.voice_handler import VoiceAgentWebSocketHandler
-from backend.models.models import Appointment, AppointmentStatus, PatientMemory, DoctorSchedule
-from backend.memory.session_memory import RedisMemoryManager
+from db.database import init_db, close_db, get_db
+from websocket.voice_handler import VoiceAgentWebSocketHandler
+from models.models import Appointment, AppointmentStatus, PatientMemory, DoctorSchedule
+from memory.session_memory import RedisMemoryManager
 from sqlalchemy import select
 
 
@@ -195,7 +195,7 @@ async def update_patient_preferences(
         patient = result.scalar_one_or_none()
         
         if not patient:
-            from backend.models.models import PatientMemory
+            from models.models import PatientMemory
             patient = PatientMemory(patient_id=patient_id)
             db.add(patient)
         
@@ -247,7 +247,7 @@ async def get_latency_stats(
         "metrics_count": 0,
     }
     try:
-        from backend.models.models import LatencyMetric, ConversationLog
+        from models.models import LatencyMetric, ConversationLog
 
         result = await db.execute(
             select(LatencyMetric)
