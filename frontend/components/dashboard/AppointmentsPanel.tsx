@@ -1,8 +1,8 @@
 'use client';
 
-import React from 'react';
-import PageHeader from '@/components/layout/PageHeader';
-import { Appointment } from '@/types';
+import React from  'react';
+import PageHeader from  '@/components/layout/PageHeader';
+import { Appointment } from  '@/types';
 
 function AppointmentCard({ appointment }: { appointment: Appointment }) {
   const statusClass =

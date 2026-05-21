@@ -4,15 +4,15 @@ WebSocket handler for real-time voice streaming
 import base64
 import logging
 import time
-from typing import Dict, Any, Optional
+from  typing import Dict, Any, Optional
 import uuid
-from fastapi import WebSocket, WebSocketDisconnect
+from  fastapi import WebSocket, WebSocketDisconnect
 
-fromservices.stt_service import STTService, TTSService
-fromservices.language_detection import LanguageDetectionService
-fromagent.orchestrator.llm_orchestrator import LLMOrchestrator
-frommemory.session_memory import RedisMemoryManager, PersistentMemoryManager
-fromservices.latency_tracker import LatencyTracker
+from  services.stt_service import STTService, TTSService
+from  services.language_detection import LanguageDetectionService
+from  agent.orchestrator.llm_orchestrator import LLMOrchestrator
+from  memory.session_memory import RedisMemoryManager, PersistentMemoryManager
+from  services.latency_tracker import LatencyTracker
 
 logger = logging.getLogger(__name__)
 
@@ -284,7 +284,7 @@ class VoiceAgentWebSocketHandler:
     ):
         """Log conversation to database"""
         try:
-            frommodels.models import ConversationLog
+            from models.models import ConversationLog
             
             log = ConversationLog(
                 session_id=session_id,

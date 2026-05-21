@@ -2,7 +2,7 @@
  * Voice WebSocket client
  */
 
-import { WebSocketMessage } from '@/types';
+import { WebSocketMessage } from  '@/types';
 
 export class VoiceClient {
   private ws: WebSocket | null = null;

@@ -1,8 +1,8 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
-import { APIClient } from '@/services/api';
-import { Appointment, Doctor, LatencyStats, PatientInfo } from '@/types';
+import { useCallback, useEffect, useState } from  'react';
+import { APIClient } from  '@/services/api';
+import { Appointment, Doctor, LatencyStats, PatientInfo } from  '@/types';
 
 export function usePatientData(apiUrl: string, patientId: string) {
   const [appointments, setAppointments] = useState<Appointment[]>([]);

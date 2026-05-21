@@ -3,8 +3,8 @@ Language detection service
 Supports English, Hindi, Tamil and Telugu
 """
 import os
-from typing import Tuple
-from textblob import TextBlob
+from  typing import Tuple
+from  textblob import TextBlob
 import json
 
 SUPPORTED_LANGUAGES = {
@@ -25,7 +25,7 @@ class LanguageDetectionService:
     @staticmethod
     def detect_language(text: str) -> Tuple[str, float]:
         """
-        Detect language from text
+        Detect language from  text
         Returns (language_code, confidence)
         """
         if not text or len(text.strip()) < 2:
@@ -58,5 +58,5 @@ class LanguageDetectionService:
 
     @staticmethod
     def get_language_name(language_code: str) -> str:
-        """Get language name from code"""
+        """Get language name from  code"""
         return SUPPORTED_LANGUAGES.get(language_code, "Unknown")

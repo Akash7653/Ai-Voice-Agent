@@ -2,7 +2,7 @@
 
 ## 📋 Executive Summary
 
-This document provides the complete production-grade redesign of the AI Healthcare Voice Agent. The project has been transformed from an admin-dashboard interface to a polished, realtime multilingual voice-first healthcare assistant suitable for enterprise deployment and top-tier engineering assessments.
+This document provides the complete production-grade redesign of the AI Healthcare Voice Agent. The project has been transformed from  an admin-dashboard interface to a polished, realtime multilingual voice-first healthcare assistant suitable for enterprise deployment and top-tier engineering assessments.
 
 **Key Improvements:**
 - ✅ Audio streaming optimized (500ms chunks, MIME fallback)
@@ -126,7 +126,7 @@ export function useVoiceCapture(chunkIntervalMs: number = 500) {
 
 2. **MIME Type Fallback**
    - **Cross-Browser Support**: Safari, Firefox, Chrome all have different codec support
-   - **Graceful Degradation**: Falls back from Opus → WebM → Browser Default
+   - **Graceful Degradation**: Falls back from  Opus → WebM → Browser Default
    - **Production-Ready**: Handles edge cases without crashing
    - **Logging**: Debug information for troubleshooting
 
@@ -503,7 +503,7 @@ Breakdown:
 
 ```dockerfile
 # backend/Dockerfile
-FROM python:3.11-slim
+from  python:3.11-slim
 
 WORKDIR /app
 COPY requirements.txt .

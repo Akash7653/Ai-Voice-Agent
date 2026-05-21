@@ -94,7 +94,7 @@ Total Latency:     540ms ❌ (If > 450ms, note variations)
 ```bash
 # Check conversation log in database
 docker-compose exec postgres psql -U voice_user -d voice_agent_db -c \
-  "SELECT transcript, language, intent FROM conversation_log ORDER BY created_at DESC LIMIT 1;"
+  "SELECT transcript, language, intent from  conversation_log ORDER BY created_at DESC LIMIT 1;"
 ```
 
 ---
@@ -156,7 +156,7 @@ docker-compose exec postgres psql -U voice_user -d voice_agent_db -c \
 **Expected Output**:
 - ✅ Backend returns success
 - ✅ Appointment status changes to: `cancelled`
-- ✅ UI removes from active list
+- ✅ UI removes from  active list
 - ✅ Audit log created
 
 ---
@@ -181,7 +181,7 @@ docker-compose exec postgres psql -U voice_user -d voice_agent_db -c \
 **Verify in Database**:
 ```bash
 docker-compose exec postgres psql -U voice_user -d voice_agent_db -c \
-  "SELECT patient_id, doctor_name, appointment_date, appointment_time, status FROM appointments WHERE doctor_name = 'Dr. Sharma' AND appointment_date = CURRENT_DATE + 1;"
+  "SELECT patient_id, doctor_name, appointment_date, appointment_time, status from  appointments WHERE doctor_name = 'Dr. Sharma' AND appointment_date = CURRENT_DATE + 1;"
 ```
 
 ---
@@ -309,13 +309,13 @@ EOF
 ### Check Appointments
 ```bash
 docker-compose exec postgres psql -U voice_user -d voice_agent_db -c \
-  "SELECT * FROM appointments LIMIT 5;"
+  "SELECT * from  appointments LIMIT 5;"
 ```
 
 ### Check Conversation Logs
 ```bash
 docker-compose exec postgres psql -U voice_user -d voice_agent_db -c \
-  "SELECT session_id, transcript, intent, latency_ms FROM conversation_log 
+  "SELECT session_id, transcript, intent, latency_ms from  conversation_log 
    ORDER BY created_at DESC LIMIT 5;"
 ```
 
@@ -323,7 +323,7 @@ docker-compose exec postgres psql -U voice_user -d voice_agent_db -c \
 ```bash
 docker-compose exec postgres psql -U voice_user -d voice_agent_db -c \
   "SELECT patient_id, language, preferred_doctor, total_interactions 
-   FROM patient_memory ORDER BY total_interactions DESC;"
+   from  patient_memory ORDER BY total_interactions DESC;"
 ```
 
 ### Check Latency Metrics
@@ -331,7 +331,7 @@ docker-compose exec postgres psql -U voice_user -d voice_agent_db -c \
 docker-compose exec postgres psql -U voice_user -d voice_agent_db -c \
   "SELECT component, AVG(duration_ms) as avg_latency, 
           PERCENTILE_CONT(0.95) WITHIN GROUP (ORDER BY duration_ms) as p95 
-   FROM latency_metric 
+   from  latency_metric 
    GROUP BY component;"
 ```
 
@@ -349,7 +349,7 @@ docker-compose logs backend | grep -i scheduler
 ```bash
 docker-compose exec postgres psql -U voice_user -d voice_agent_db -c \
   "SELECT patient_id, campaign_type, scheduled_time, status 
-   FROM campaign_task ORDER BY scheduled_time DESC LIMIT 10;"
+   from  campaign_task ORDER BY scheduled_time DESC LIMIT 10;"
 ```
 
 ---
@@ -364,7 +364,7 @@ pip install locust
 
 # Create locustfile.py
 cat > locustfile.py << 'EOF'
-from locust import HttpUser, task, between
+from  locust import HttpUser, task, between
 import json
 import base64
 
@@ -415,7 +415,7 @@ docker-compose logs backend | tail -100
 
 # Check database performance
 docker-compose exec postgres psql -U voice_user -d voice_agent_db -c \
-  "SELECT * FROM pg_stat_statements ORDER BY mean_time DESC LIMIT 10;"
+  "SELECT * from  pg_stat_statements ORDER BY mean_time DESC LIMIT 10;"
 
 # Check Redis connectivity
 docker-compose exec redis redis-cli ping
@@ -442,7 +442,7 @@ docker-compose restart backend
 
 **0-30s: Intro & Architecture**
 - "This is a real-time voice AI agent for appointment booking"
-- Show architecture diagram from README
+- Show architecture diagram from  README
 - "Sub-450ms latency target with real tool calling"
 
 **30-60s: English Demo**

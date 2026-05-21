@@ -82,7 +82,7 @@ docker-compose exec postgres psql -U voice_user -d voice_agent_db
 
 # Run SQL query
 \c voice_agent_db
-SELECT * FROM appointments;
+SELECT * from  appointments;
 
 # Backup database
 docker-compose exec postgres pg_dump -U voice_user voice_agent_db > backup.sql
@@ -199,7 +199,7 @@ curl http://localhost:8000/health
 
 # Database connection
 docker-compose exec backend python -c "
-from db.database import AsyncSessionLocal
+from  db.database import AsyncSessionLocal
 print('Database: OK')
 "
 
@@ -229,20 +229,20 @@ docker-compose logs --tail=100 backend
 ### Database Debugging
 ```sql
 -- Check active connections
-SELECT * FROM pg_stat_activity;
+SELECT * from  pg_stat_activity;
 
 -- View table structure
 \d appointments
 
 -- Count records
-SELECT COUNT(*) FROM appointments;
+SELECT COUNT(*) from  appointments;
 
 -- Recent conversations
-SELECT * FROM conversation_log ORDER BY created_at DESC LIMIT 10;
+SELECT * from  conversation_log ORDER BY created_at DESC LIMIT 10;
 
 -- Latency stats
 SELECT component, AVG(duration_ms), MIN(duration_ms), MAX(duration_ms)
-FROM latency_metric
+from  latency_metric
 GROUP BY component;
 ```
 
@@ -264,7 +264,7 @@ wscat -c ws://localhost:8000/ws/voice/patient_001
 
 ### Latency Measurement
 ```python
-from services.latency_tracker import LatencyTracker
+from  services.latency_tracker import LatencyTracker
 
 tracker = LatencyTracker(session_id)
 tracker.start("component_name")
@@ -281,7 +281,7 @@ SET log_statement = 'all';
 
 -- Analyze query
 EXPLAIN ANALYZE
-SELECT * FROM appointments WHERE patient_id = 'patient_001';
+SELECT * from  appointments WHERE patient_id = 'patient_001';
 
 -- Slow query log
 SET log_min_duration_statement = 100;  -- Log queries > 100ms

@@ -91,7 +91,7 @@ export OPENAI_API_KEY=sk-...
 # redis-server
 
 # Initialize database
-python -c "fromdb.database import Base, engine; Base.metadata.create_all(bind=engine)"
+python -c "from db.database import Base, engine; Base.metadata.create_all(bind=engine)"
 
 # Run server
 python -m uvicorn main:app --reload --host 0.0.0.0 --port 8000
@@ -257,9 +257,9 @@ curl http://localhost:8000/health
 ### Database Connection
 
 ```bash
-# Test from backend container
+# Test from  backend container
 docker-compose exec backend python -c "
-fromdb.database import AsyncSessionLocal
+from db.database import AsyncSessionLocal
 print('Database connection: OK')
 "
 ```
@@ -267,7 +267,7 @@ print('Database connection: OK')
 ### Redis Connection
 
 ```bash
-# Test from backend container
+# Test from  backend container
 docker-compose exec backend python -c "
 import redis
 r = redis.from_url('redis://redis:6379')
@@ -506,7 +506,7 @@ kubectl create namespace voice-agent
 
 # Create secrets
 kubectl create secret generic db-secret \
-  --from-literal=password=... \
+  --from -literal=password=... \
   -n voice-agent
 
 # Deploy

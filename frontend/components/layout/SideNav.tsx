@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useState } from 'react';
-import { AppView, useApp } from '@/context/AppContext';
-import VoiceAgentSelector from '@/components/VoiceAgentSelector';
-import ModeSwitcher from '@/components/ModeSwitcher';
+import React, { useState } from  'react';
+import { AppView, useApp } from  '@/context/AppContext';
+import VoiceAgentSelector from  '@/components/VoiceAgentSelector';
+import ModeSwitcher from  '@/components/ModeSwitcher';
 
 const links: { id: AppView; label: string; icon: string }[] = [
   { id: 'dashboard', label: 'Dashboard', icon: '◉' },
@@ -26,7 +26,7 @@ export default function SideNav() {
     >
       <div className="flex items-center justify-between border-b border-slate-800/80 p-4">
         <div className="flex items-center gap-2 overflow-hidden">
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-cyan-400 to-blue-600 text-sm font-bold">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from -cyan-400 to-blue-600 text-sm font-bold">
             2C
           </div>
           {!collapsed && (

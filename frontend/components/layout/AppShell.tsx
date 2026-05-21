@@ -1,9 +1,9 @@
 'use client';
 
-import React from 'react';
-import { AppProvider } from '@/context/AppContext';
-import SideNav from '@/components/layout/SideNav';
-import MobileNav from '@/components/layout/MobileNav';
+import React from  'react';
+import { AppProvider } from  '@/context/AppContext';
+import SideNav from  '@/components/layout/SideNav';
+import MobileNav from  '@/components/layout/MobileNav';
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
   return (

@@ -4,8 +4,8 @@ Uses Redis for session memory and PostgreSQL for persistent memory
 """
 import json
 import redis
-from datetime import datetime, timedelta
-from typing import Dict, Any, Optional
+from  datetime import datetime, timedelta
+from  typing import Dict, Any, Optional
 import os
 
 class RedisMemoryManager:
@@ -101,8 +101,8 @@ class PersistentMemoryManager:
         conversation_summary: Optional[str] = None
     ) -> bool:
         """Save or update patient memory"""
-        frommodels.models import PatientMemory
-        from sqlalchemy import select
+        from  models.models import PatientMemory
+        from  sqlalchemy import select
         
         try:
             # Check if patient memory exists
@@ -138,8 +138,8 @@ class PersistentMemoryManager:
     
     async def get_patient_memory(self, patient_id: str) -> Optional[Dict[str, Any]]:
         """Retrieve patient memory"""
-        frommodels.models import PatientMemory
-        from sqlalchemy import select
+        from  models.models import PatientMemory
+        from  sqlalchemy import select
         
         try:
             result = await self.db_session.execute(

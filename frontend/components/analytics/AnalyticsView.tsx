@@ -1,11 +1,11 @@
 'use client';
 
-import React from 'react';
-import PageHeader from '@/components/layout/PageHeader';
-import GlassCard from '@/components/ui/GlassCard';
-import LatencyPanel from '@/components/panels/LatencyPanel';
-import { useApp } from '@/context/AppContext';
-import { usePatientData } from '@/hooks/usePatientData';
+import React from  'react';
+import PageHeader from  '@/components/layout/PageHeader';
+import GlassCard from  '@/components/ui/GlassCard';
+import LatencyPanel from  '@/components/panels/LatencyPanel';
+import { useApp } from  '@/context/AppContext';
+import { usePatientData } from  '@/hooks/usePatientData';
 
 const TARGET = 450;
 
@@ -23,7 +23,7 @@ export default function AnalyticsView() {
         <div className="mx-auto max-w-4xl space-y-6">
           <GlassCard title="Latency evaluation" icon="📊" highlight="teal">
             <p className="text-xs text-slate-400 mb-4">
-              Assignment target: &lt;{TARGET}ms from speech end to first audio response. STT, LLM, Tools, and TTS
+              Assignment target: &lt;{TARGET}ms from  speech end to first audio response. STT, LLM, Tools, and TTS
               are measured per turn via WebSocket <code className="text-teal-300">latency_metrics</code> and logged server-side.
             </p>
             {loading ? (

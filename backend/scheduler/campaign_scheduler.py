@@ -2,11 +2,11 @@
 Campaign scheduler for outbound reminder calls
 """
 import asyncio
-from datetime import datetime, timedelta
+from  datetime import datetime, timedelta
 import logging
-from apscheduler.schedulers.asyncio import AsyncIOScheduler
-from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
-from sqlalchemy import select
+from  apscheduler.schedulers.asyncio import AsyncIOScheduler
+from  sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
+from  sqlalchemy import select
 
 logger = logging.getLogger(__name__)
 
@@ -21,7 +21,7 @@ class CampaignScheduler:
     
     async def initialize(self):
         """Initialize scheduler and database connection"""
-        fromdb.database import AsyncSessionLocal
+        from db.database import AsyncSessionLocal
         self.SessionLocal = AsyncSessionLocal
         self.scheduler.start()
         logger.info("Campaign scheduler initialized")
@@ -50,7 +50,7 @@ class CampaignScheduler:
         """Send appointment reminders"""
         try:
             async with self.SessionLocal() as session:
-                frommodels.models import Appointment, AppointmentStatus, CampaignTask, CampaignStatus
+                from models.models import Appointment, AppointmentStatus, CampaignTask, CampaignStatus
                 
                 # Find appointments in 24 hours
                 tomorrow = datetime.utcnow() + timedelta(hours=24)
@@ -96,9 +96,9 @@ class CampaignScheduler:
         """Send follow-up campaigns"""
         try:
             async with self.SessionLocal() as session:
-                frommodels.models import Appointment, AppointmentStatus, CampaignTask, CampaignStatus
+                from models.models import Appointment, AppointmentStatus, CampaignTask, CampaignStatus
                 
-                # Find completed appointments from 3 days ago
+                # Find completed appointments from  3 days ago
                 three_days_ago = datetime.utcnow() - timedelta(days=3)
                 
                 result = await session.execute(

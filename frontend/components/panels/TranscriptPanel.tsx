@@ -1,7 +1,7 @@
 'use client';
 
-import GlassCard from '@/components/ui/GlassCard';
-import { languageLabel } from '@/lib/languages';
+import GlassCard from  '@/components/ui/GlassCard';
+import { languageLabel } from  '@/lib/languages';
 
 export default function TranscriptPanel({
   userText,

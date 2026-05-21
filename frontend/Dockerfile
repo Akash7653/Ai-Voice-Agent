@@ -1,5 +1,5 @@
 # Frontend Dockerfile
-FROM node:20-alpine AS builder
+from  node:20-alpine AS builder
 
 WORKDIR /app
 
@@ -16,14 +16,14 @@ COPY . .
 RUN npm run build
 
 # Production image
-FROM node:20-alpine
+from  node:20-alpine
 
 WORKDIR /app
 
-# Copy from builder
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/public ./public
+# Copy from  builder
+COPY --from =builder /app/node_modules ./node_modules
+COPY --from =builder /app/.next ./.next
+COPY --from =builder /app/public ./public
 COPY package.json ./
 
 EXPOSE 3000

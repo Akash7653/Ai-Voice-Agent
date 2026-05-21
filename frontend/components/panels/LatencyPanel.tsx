@@ -1,7 +1,7 @@
 'use client';
 
-import GlassCard from '@/components/ui/GlassCard';
-import { LatencyMetrics } from '@/types';
+import GlassCard from  '@/components/ui/GlassCard';
+import { LatencyMetrics } from  '@/types';
 
 const TARGET_MS = 450;
 const STAGES = [
@@ -55,7 +55,7 @@ export default function LatencyPanel({ metrics }: { metrics: LatencyMetrics | nu
               </div>
               <div className="h-1.5 rounded-full bg-slate-800 overflow-hidden">
                 <div
-                  className="h-full bg-gradient-to-r from-cyan-500 to-teal-400 transition-all"
+                  className="h-full bg-gradient-to-r from -cyan-500 to-teal-400 transition-all"
                   style={{ width: `${pct}%` }}
                 />
               </div>

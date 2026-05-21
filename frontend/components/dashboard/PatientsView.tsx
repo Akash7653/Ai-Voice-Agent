@@ -1,11 +1,11 @@
 'use client';
 
-import React, { useState } from 'react';
-import PageHeader from '@/components/layout/PageHeader';
-import GlassCard from '@/components/ui/GlassCard';
-import { useApp } from '@/context/AppContext';
-import { usePatientData } from '@/hooks/usePatientData';
-import { LANGUAGES } from '@/lib/languages';
+import React, { useState } from  'react';
+import PageHeader from  '@/components/layout/PageHeader';
+import GlassCard from  '@/components/ui/GlassCard';
+import { useApp } from  '@/context/AppContext';
+import { usePatientData } from  '@/hooks/usePatientData';
+import { LANGUAGES } from  '@/lib/languages';
 
 export default function PatientsView() {
   const { apiUrl, patientId, setPatientId } = useApp();

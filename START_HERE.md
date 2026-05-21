@@ -278,7 +278,7 @@ Your system implements **real tool calling** (not simulated):
    - Handles errors gracefully
 
 3. **Actual Tool Execution**: Real database operations
-   - Checks doctor availability from PostgreSQL
+   - Checks doctor availability from  PostgreSQL
    - Validates against booked slots
    - Detects conflicts
    - Creates actual appointment record
@@ -347,7 +347,7 @@ docker-compose down -v
 docker-compose up -d
 sleep 30
 
-# 2. Run all tests from TESTING_GUIDE.md
+# 2. Run all tests from  TESTING_GUIDE.md
 # - English booking ✓
 # - Hindi conversation ✓
 # - Tamil support ✓
@@ -356,7 +356,7 @@ sleep 30
 
 # 3. Verify database
 docker-compose exec postgres psql -U voice_user -d voice_agent_db \
-  -c "SELECT COUNT(*) as appointment_count FROM appointments;"
+  -c "SELECT COUNT(*) as appointment_count from  appointments;"
 
 # 4. Check logs
 docker-compose logs --tail=50 backend
@@ -375,7 +375,7 @@ docker-compose logs --tail=50 backend
 # - http://localhost:8000/docs (in another tab)
 # - Text editor with architecture notes
 
-# 3. Follow script from TESTING_GUIDE.md (3 minutes)
+# 3. Follow script from  TESTING_GUIDE.md (3 minutes)
 # - Intro (30s)
 # - English demo (30s)
 # - Hindi demo (30s)
@@ -459,7 +459,7 @@ for clinical appointment booking.
 Built with Python FastAPI backend, Next.js React frontend, 
 PostgreSQL and Redis for data, and OpenAI APIs for AI.
 
-Key achievement: Sub-450 millisecond latency from speech 
+Key achievement: Sub-450 millisecond latency from  speech 
 input to audio response, with real tool calling - not 
 simulated responses. Supports English, Hindi, and Tamil."
 ```

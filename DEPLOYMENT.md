@@ -211,17 +211,17 @@ spec:
         - containerPort: 8000
         env:
         - name: OPENAI_API_KEY
-          valueFrom:
+          valuefrom :
             secretKeyRef:
               name: openai-secret
               key: api-key
         - name: DATABASE_URL
-          valueFrom:
+          valuefrom :
             secretKeyRef:
               name: db-secret
               key: url
         - name: REDIS_URL
-          valueFrom:
+          valuefrom :
             configMapKeyRef:
               name: redis-config
               key: url
@@ -301,11 +301,11 @@ grep "\[LLM\]" backend/logs/voice_agent.log
 psql -h localhost -U postgres -d voice_agent
 
 # Check sessions table
-SELECT session_id, patient_id, state, created_at FROM sessions 
+SELECT session_id, patient_id, state, created_at from  sessions 
 ORDER BY created_at DESC LIMIT 5;
 
 # Check transcriptions table
-SELECT user_input, ai_response, latency_ms FROM transcriptions 
+SELECT user_input, ai_response, latency_ms from  transcriptions 
 WHERE patient_id = 'patient_001' 
 ORDER BY created_at DESC LIMIT 10;
 ```
@@ -371,7 +371,7 @@ curl http://localhost:8000/health
 echo $OPENAI_API_KEY
 
 # Test API key
-python -c "from openai import OpenAI; OpenAI(api_key='$OPENAI_API_KEY').models.list()"
+python -c "from  openai import OpenAI; OpenAI(api_key='$OPENAI_API_KEY').models.list()"
 
 # If error: Update .env and restart backend
 ```
@@ -403,7 +403,7 @@ createdb voice_agent
 1. Check microphone is unmuted
 2. Speak clearly and loudly
 3. Check microphone permissions in browser
-4. Increase chunk size from 500ms to 1000ms if still issues
+4. Increase chunk size from  500ms to 1000ms if still issues
 
 ### Issue: "Latency > 500ms"
 
@@ -548,8 +548,8 @@ app.add_middleware(
 ### 3. Add Rate Limiting
 
 ```python
-from slowapi import Limiter
-from slowapi.util import get_remote_address
+from  slowapi import Limiter
+from  slowapi.util import get_remote_address
 
 limiter = Limiter(key_func=get_remote_address)
 app.state.limiter = limiter

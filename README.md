@@ -4,7 +4,7 @@ A production-grade, real-time multilingual voice AI agent for clinical appointme
 
 ## Overview
 
-This system enables patients to book, reschedule, and cancel medical appointments using natural voice conversations. It supports English, Hindi, and Tamil with sub-450ms latency from speech end to first response.
+This system enables patients to book, reschedule, and cancel medical appointments using natural voice conversations. It supports English, Hindi, and Tamil with sub-450ms latency from  speech end to first response.
 
 ```
 Browser Voice Input
@@ -438,7 +438,7 @@ kubectl create namespace voice-agent
 
 # Create secrets for sensitive data
 kubectl create secret generic openai-secret \
-  --from-literal=api-key=<YOUR_KEY> \
+  --from -literal=api-key=<YOUR_KEY> \
   -n voice-agent
 
 # Deploy services

@@ -1,13 +1,13 @@
 'use client';
 
-import React from 'react';
-import { useApp } from '@/context/AppContext';
-import DashboardView from '@/components/dashboard/DashboardView';
-import VoiceConsole from '@/components/voice/VoiceConsole';
-import AppointmentsView from '@/components/dashboard/AppointmentsView';
-import PatientsView from '@/components/dashboard/PatientsView';
-import CampaignsView from '@/components/campaigns/CampaignsView';
-import AnalyticsView from '@/components/analytics/AnalyticsView';
+import React from  'react';
+import { useApp } from  '@/context/AppContext';
+import DashboardView from  '@/components/dashboard/DashboardView';
+import VoiceConsole from  '@/components/voice/VoiceConsole';
+import AppointmentsView from  '@/components/dashboard/AppointmentsView';
+import PatientsView from  '@/components/dashboard/PatientsView';
+import CampaignsView from  '@/components/campaigns/CampaignsView';
+import AnalyticsView from  '@/components/analytics/AnalyticsView';
 
 export default function HomePage() {
   const { view } = useApp();

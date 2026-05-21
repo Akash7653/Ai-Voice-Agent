@@ -1,15 +1,15 @@
 """
 Appointment Management Tools
 """
-from typing import Dict, List, Optional, Any
-from datetime import datetime, timedelta
-from sqlalchemy import select
+from  typing import Dict, List, Optional, Any
+from  datetime import datetime, timedelta
+from  sqlalchemy import select
 import json
-from dataclasses import dataclass
+from  dataclasses import dataclass
 
 @dataclass
 class ToolResult:
-    """Result from tool execution"""
+    """Result from  tool execution"""
     success: bool
     message: str
     data: Optional[Dict[str, Any]] = None
@@ -32,7 +32,7 @@ class AppointmentTools:
         Check doctor availability
         Returns available slots
         """
-        frommodels.models import DoctorSchedule
+        from models.models import DoctorSchedule
         
         try:
             # Query for available doctors
@@ -89,7 +89,7 @@ class AppointmentTools:
         """
         Book an appointment
         """
-        frommodels.models import Appointment, DoctorSchedule, AppointmentStatus
+        from models.models import Appointment, DoctorSchedule, AppointmentStatus
         
         try:
             # Validate appointment details
@@ -164,7 +164,7 @@ class AppointmentTools:
         """
         Reschedule an existing appointment
         """
-        frommodels.models import Appointment, AppointmentStatus
+        from models.models import Appointment, AppointmentStatus
         import uuid
         
         try:
@@ -237,7 +237,7 @@ class AppointmentTools:
         """
         Cancel an appointment
         """
-        frommodels.models import Appointment, AppointmentStatus
+        from models.models import Appointment, AppointmentStatus
         import uuid
         
         try:
@@ -289,7 +289,7 @@ class AppointmentTools:
                 "conflict_found": "You already have an appointment at this time.",
                 "appointment_not_found": "Appointment not found.",
                 "appointment_booked": "Great! Your appointment with {{doctor}} is booked for {{date}} at {{time}}.",
-                "appointment_rescheduled": "Your appointment has been rescheduled from {{old_date}} {{old_time}} to {{new_date}} {{new_time}}.",
+                "appointment_rescheduled": "Your appointment has been rescheduled from  {{old_date}} {{old_time}} to {{new_date}} {{new_time}}.",
                 "appointment_cancelled": "Your appointment with {{doctor}} on {{date}} has been cancelled.",
                 "new_slot_conflict": "The new slot is not available. Please choose another time.",
             },

@@ -239,7 +239,7 @@ git commit -m "Brief description of changes"
 git push origin main
 ```
 
-### Update from GitHub
+### Update from  GitHub
 
 ```bash
 # Pull latest changes
@@ -468,7 +468,7 @@ git log --oneline -1
 ### "Accidentally committed .env file"
 
 ```bash
-# Remove from git (but keep local copy)
+# Remove from  git (but keep local copy)
 git rm --cached .env
 
 # Add to .gitignore
@@ -476,7 +476,7 @@ echo ".env" >> .gitignore
 
 # Commit the fix
 git add .gitignore
-git commit -m "Remove .env from git tracking"
+git commit -m "Remove .env from  git tracking"
 
 # Rewrite history to remove it completely (advanced)
 git filter-branch --tree-filter 'rm -f .env' HEAD

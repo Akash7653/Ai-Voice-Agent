@@ -1,28 +1,28 @@
 'use client';
 
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { AIOrb } from '@/components/AIOrb';
-import { Waveform } from '@/components/Waveform';
-import ControlBar from '@/components/voice/ControlBar';
-import TranscriptPanel from '@/components/panels/TranscriptPanel';
-import ReasoningPanel from '@/components/panels/ReasoningPanel';
-import SessionMemoryPanel from '@/components/panels/SessionMemoryPanel';
-import PersistentMemoryPanel from '@/components/panels/PersistentMemoryPanel';
-import LatencyPanel from '@/components/panels/LatencyPanel';
-import SchedulingPanel from '@/components/panels/SchedulingPanel';
-import PipelineStatus from '@/components/panels/PipelineStatus';
-import PageHeader from '@/components/layout/PageHeader';
-import { useApp } from '@/context/AppContext';
+import React, { useCallback, useEffect, useRef, useState } from  'react';
+import { AIOrb } from  '@/components/AIOrb';
+import { Waveform } from  '@/components/Waveform';
+import ControlBar from  '@/components/voice/ControlBar';
+import TranscriptPanel from  '@/components/panels/TranscriptPanel';
+import ReasoningPanel from  '@/components/panels/ReasoningPanel';
+import SessionMemoryPanel from  '@/components/panels/SessionMemoryPanel';
+import PersistentMemoryPanel from  '@/components/panels/PersistentMemoryPanel';
+import LatencyPanel from  '@/components/panels/LatencyPanel';
+import SchedulingPanel from  '@/components/panels/SchedulingPanel';
+import PipelineStatus from  '@/components/panels/PipelineStatus';
+import PageHeader from  '@/components/layout/PageHeader';
+import { useApp } from  '@/context/AppContext';
 import {
   useVoiceCapture,
   useVoiceWebSocket,
   useAudioPlayback,
   MIN_RECORDING_BYTES,
   MIN_RECORDING_MS,
-} from '@/hooks/useVoice';
-import { usePatientData } from '@/hooks/usePatientData';
-import { extractSuggestedSlots } from '@/lib/languages';
-import { PipelineStage, VoiceStatus } from '@/types';
+} from  '@/hooks/useVoice';
+import { usePatientData } from  '@/hooks/usePatientData';
+import { extractSuggestedSlots } from  '@/lib/languages';
+import { PipelineStage, VoiceStatus } from  '@/types';
 
 export default function VoiceConsole() {
   const { apiUrl, patientId } = useApp();

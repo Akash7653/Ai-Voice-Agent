@@ -1,8 +1,8 @@
 'use client';
 
-import React from 'react';
-import PageHeader from '@/components/layout/PageHeader';
-import { LatencyStats } from '@/types';
+import React from  'react';
+import PageHeader from  '@/components/layout/PageHeader';
+import { LatencyStats } from  '@/types';
 
 export default function AnalyticsView({
   latencyStats,

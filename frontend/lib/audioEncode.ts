@@ -26,7 +26,7 @@ function interleave(left: Float32Array, right: Float32Array): Float32Array {
   return result;
 }
 
-export function encodeWavFromAudioBuffer(audioBuffer: AudioBuffer): ArrayBuffer {
+export function encodeWavfrom AudioBuffer(audioBuffer: AudioBuffer): ArrayBuffer {
   const numChannels = audioBuffer.numberOfChannels;
   const sampleRate = audioBuffer.sampleRate;
   const samples =
@@ -61,7 +61,7 @@ export async function blobToWavArrayBuffer(blob: Blob): Promise<ArrayBuffer> {
   const audioContext = new AudioContext();
   try {
     const decoded = await audioContext.decodeAudioData(arrayBuffer.slice(0));
-    return encodeWavFromAudioBuffer(decoded);
+    return encodeWavfrom AudioBuffer(decoded);
   } finally {
     await audioContext.close().catch(() => undefined);
   }

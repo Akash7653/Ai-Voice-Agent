@@ -1,7 +1,7 @@
 'use client';
 
-import React from 'react';
-import { useApp } from '@/context/AppContext';
+import React from  'react';
+import { useApp } from  '@/context/AppContext';
 
 const titles: Record<string, { title: string; subtitle: string }> = {
   dashboard: { title: 'Dashboard', subtitle: 'Overview and quick actions' },

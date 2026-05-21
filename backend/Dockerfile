@@ -1,5 +1,5 @@
 # Use Python 3.11 slim image
-FROM python:3.11-slim
+from  python:3.11-slim
 
 WORKDIR /app
 

@@ -1,7 +1,7 @@
 'use client';
 
-import React from 'react';
-import { LatencyMetrics as BackendLatency } from '@/types';
+import React from  'react';
+import { LatencyMetrics as BackendLatency } from  '@/types';
 
 export function latencyToPanel(metrics: BackendLatency | null) {
   if (!metrics) return null;
@@ -81,7 +81,7 @@ export const ReasoningPanel: React.FC<ReasoningPanelProps> = ({
         </div>
         <div className="h-1.5 overflow-hidden rounded-full bg-purple-950">
           <div
-            className="h-full bg-gradient-to-r from-emerald-400 to-purple-500"
+            className="h-full bg-gradient-to-r from -emerald-400 to-purple-500"
             style={{ width: `${Math.min(confidence * 100, 100)}%` }}
           />
         </div>

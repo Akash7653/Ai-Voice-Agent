@@ -333,7 +333,7 @@ docker-compose logs --tail=20
 # Expected: No error messages
 
 # 7. Verify database
-docker-compose exec postgres psql -U voice_user -d voice_agent_db -c "SELECT COUNT(*) FROM appointments;"
+docker-compose exec postgres psql -U voice_user -d voice_agent_db -c "SELECT COUNT(*) from  appointments;"
 # Expected: Count displayed
 
 # 8. Check Redis

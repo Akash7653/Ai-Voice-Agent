@@ -1,7 +1,7 @@
 'use client';
 
-import React from 'react';
-import { AppView, useApp } from '@/context/AppContext';
+import React from  'react';
+import { AppView, useApp } from  '@/context/AppContext';
 
 const items: { id: AppView; label: string }[] = [
   { id: 'dashboard', label: 'Home' },

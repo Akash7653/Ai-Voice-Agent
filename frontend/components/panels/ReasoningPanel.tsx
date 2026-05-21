@@ -1,7 +1,7 @@
 'use client';
 
-import GlassCard from '@/components/ui/GlassCard';
-import { ReasoningTrace } from '@/types';
+import GlassCard from  '@/components/ui/GlassCard';
+import { ReasoningTrace } from  '@/types';
 
 export default function ReasoningPanel({ trace }: { trace: ReasoningTrace | null }) {
   if (!trace) {
@@ -31,7 +31,7 @@ export default function ReasoningPanel({ trace }: { trace: ReasoningTrace | null
         </div>
         <div className="h-2 rounded-full bg-purple-950 overflow-hidden">
           <div
-            className="h-full bg-gradient-to-r from-emerald-400 to-purple-500 transition-all"
+            className="h-full bg-gradient-to-r from -emerald-400 to-purple-500 transition-all"
             style={{ width: `${Math.min(100, pct)}%` }}
           />
         </div>

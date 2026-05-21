@@ -1,7 +1,7 @@
 'use client';
 
-import React from 'react';
-import { Appointment } from '@/types';
+import React from  'react';
+import { Appointment } from  '@/types';
 
 export default function AppointmentCard({ appointment }: { appointment: Appointment }) {
   const statusClass =

@@ -1,6 +1,6 @@
 'use client';
 
-import GlassCard from '@/components/ui/GlassCard';
+import GlassCard from  '@/components/ui/GlassCard';
 
 const FLOW = [
   'User Speech',
@@ -17,7 +17,7 @@ export default function PipelineDiagram() {
   return (
     <GlassCard title="Architecture Pipeline" icon="◇" highlight="cyan" className="lg:col-span-2">
       <p className="text-xs text-slate-500 mb-3">
-        Real-time conversational pipeline — target &lt;450ms from speech end to first audio response.
+        Real-time conversational pipeline — target &lt;450ms from  speech end to first audio response.
       </p>
       <div className="flex flex-wrap items-center gap-2 text-xs">
         {FLOW.map((step, i) => (

@@ -1,7 +1,7 @@
 'use client';
 
-import React from 'react';
-import PageHeader from '@/components/layout/PageHeader';
+import React from  'react';
+import PageHeader from  '@/components/layout/PageHeader';
 
 export default function PlaceholderView({
   title,

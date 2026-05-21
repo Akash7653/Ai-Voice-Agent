@@ -3,7 +3,7 @@
  */
 'use client';
 
-import React from 'react';
+import React from  'react';
 
 export interface AIorbProps {
   status: 'listening' | 'speaking' | 'thinking' | 'idle';
@@ -15,13 +15,13 @@ export const AIOrb: React.FC<AIorbProps> = ({ status, audioLevel = 0, pulse = tr
   const getStatusColor = () => {
     switch (status) {
       case 'listening':
-        return 'from-cyan-400 via-blue-500 to-purple-600';
+        return 'from -cyan-400 via-blue-500 to-purple-600';
       case 'speaking':
-        return 'from-emerald-400 via-teal-500 to-cyan-600';
+        return 'from -emerald-400 via-teal-500 to-cyan-600';
       case 'thinking':
-        return 'from-amber-400 via-orange-500 to-red-600';
+        return 'from -amber-400 via-orange-500 to-red-600';
       default:
-        return 'from-blue-400 via-purple-500 to-pink-600';
+        return 'from -blue-400 via-purple-500 to-pink-600';
     }
   };
 
@@ -51,7 +51,7 @@ export const AIOrb: React.FC<AIorbProps> = ({ status, audioLevel = 0, pulse = tr
           key={i}
           className="absolute inset-0 rounded-full border-2 border-transparent bg-gradient-to-r"
           style={{
-            backgroundImage: `conic-gradient(from 0deg, rgb(34 197 94 / ${0.1 + i * 0.15}), transparent)`,
+            backgroundImage: `conic-gradient(from  0deg, rgb(34 197 94 / ${0.1 + i * 0.15}), transparent)`,
             animation: `spin ${8 - i * 2}s linear infinite`,
             opacity: status !== 'idle' ? 1 : 0.3,
             transition: 'opacity 0.3s ease',
@@ -69,7 +69,7 @@ export const AIOrb: React.FC<AIorbProps> = ({ status, audioLevel = 0, pulse = tr
         }}
       >
         {/* Inner shine effect */}
-        <div className="absolute inset-2 rounded-full bg-gradient-to-br from-white/30 to-transparent opacity-50" />
+        <div className="absolute inset-2 rounded-full bg-gradient-to-br from -white/30 to-transparent opacity-50" />
 
         {/* Status indicator */}
         <div className="absolute inset-0 flex items-center justify-center">
@@ -84,7 +84,7 @@ export const AIOrb: React.FC<AIorbProps> = ({ status, audioLevel = 0, pulse = tr
 
       <style>{`
         @keyframes spin {
-          from { transform: rotate(0deg); }
+          from  { transform: rotate(0deg); }
           to { transform: rotate(360deg); }
         }
         @keyframes pulse {

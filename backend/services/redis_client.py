@@ -1,5 +1,5 @@
 import os
-from upstash_redis import Redis
+from  upstash_redis import Redis
 
 redis_client = Redis(
     url=os.getenv("UPSTASH_REDIS_REST_URL"),

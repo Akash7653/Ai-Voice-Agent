@@ -4,10 +4,10 @@ LLM Orchestrator for agent reasoning and tool calling
 import json
 import re
 import time
-from typing import Dict, Any, Optional, Tuple
-from dataclasses import dataclass
+from  typing import Dict, Any, Optional, Tuple
+from  dataclasses import dataclass
 import os
-from datetime import datetime
+from  datetime import datetime
 
 
 @dataclass
@@ -25,7 +25,7 @@ class ReasoningTrace:
 
 
 class PromptManager:
-    """Manages system prompts for different languages by loading them from JSON."""
+    """Manages system prompts for different languages by loading them from  JSON."""
 
     _prompts = None
 
@@ -34,7 +34,7 @@ class PromptManager:
         if cls._prompts is not None:
             return cls._prompts
 
-        from pathlib import Path
+        from  pathlib import Path
         prompts_path = Path(__file__).resolve().parent / "prompts.json"
         try:
             with prompts_path.open("r", encoding="utf-8") as fh:
@@ -58,7 +58,7 @@ class LLMOrchestrator:
     def __init__(self, db_session=None):
         self.db_session = db_session
         try:
-            from openai import AsyncOpenAI
+            from  openai import AsyncOpenAI
             self.client = AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY"))
         except Exception as e:
             print(f"Error initializing LLM orchestrator: {e}")
@@ -152,7 +152,7 @@ class LLMOrchestrator:
         """
         Execute appropriate tool based on reasoning
         """
-        from tools.appointment_tools import AppointmentTools
+        from  tools.appointment_tools import AppointmentTools
 
         try:
             if not self.db_session:

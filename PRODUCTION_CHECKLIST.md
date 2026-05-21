@@ -174,7 +174,7 @@ curl http://api.example.com/api/latency-stats/patient_001
 
 # Slow queries
 # Solution: Add indexes, optimize queries
-SELECT * FROM pg_stat_statements ORDER BY mean_time DESC;
+SELECT * from  pg_stat_statements ORDER BY mean_time DESC;
 
 # Storage issues
 # Solution: Archive old logs, increase disk
@@ -261,10 +261,10 @@ ON appointments(patient_id, appointment_date);
 
 -- Analyze query plans
 EXPLAIN ANALYZE
-SELECT * FROM appointments WHERE patient_id = $1;
+SELECT * from  appointments WHERE patient_id = $1;
 
 -- Archive old data
-DELETE FROM conversation_log 
+DELETE from  conversation_log 
 WHERE created_at < NOW() - INTERVAL '90 days';
 ```
 

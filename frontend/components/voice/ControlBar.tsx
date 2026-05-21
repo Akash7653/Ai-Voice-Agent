@@ -1,7 +1,7 @@
 'use client';
 
-import React from 'react';
-import { LANGUAGES } from '@/lib/languages';
+import React from  'react';
+import { LANGUAGES } from  '@/lib/languages';
 
 export default function ControlBar({
   isRecording,
@@ -56,7 +56,7 @@ export default function ControlBar({
           type="button"
           onClick={onStop}
           disabled={!isRecording}
-          className="px-6 py-3 rounded-lg bg-gradient-to-r from-amber-500/80 to-orange-600/80 text-white font-semibold disabled:opacity-40"
+          className="px-6 py-3 rounded-lg bg-gradient-to-r from -amber-500/80 to-orange-600/80 text-white font-semibold disabled:opacity-40"
         >
           Stop
         </button>

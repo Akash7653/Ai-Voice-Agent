@@ -1,11 +1,11 @@
 'use client';
 
-import React from 'react';
-import PageHeader from '@/components/layout/PageHeader';
-import PipelineDiagram from '@/components/panels/PipelineDiagram';
-import GlassCard from '@/components/ui/GlassCard';
-import { useApp } from '@/context/AppContext';
-import { usePatientData } from '@/hooks/usePatientData';
+import React from  'react';
+import PageHeader from  '@/components/layout/PageHeader';
+import PipelineDiagram from  '@/components/panels/PipelineDiagram';
+import GlassCard from  '@/components/ui/GlassCard';
+import { useApp } from  '@/context/AppContext';
+import { usePatientData } from  '@/hooks/usePatientData';
 
 export default function DashboardView() {
   const { setView, apiUrl, patientId } = useApp();

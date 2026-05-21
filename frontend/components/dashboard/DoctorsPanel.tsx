@@ -1,7 +1,7 @@
 'use client';
 
-import React from 'react';
-import { Doctor } from '@/types';
+import React from  'react';
+import { Doctor } from  '@/types';
 
 export default function DoctorsPanel({ doctors, compact }: { doctors: Doctor[]; compact?: boolean }) {
   if (doctors.length === 0) {

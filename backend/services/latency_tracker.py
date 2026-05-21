@@ -2,8 +2,8 @@
 Latency tracking and monitoring service
 """
 import time
-from typing import Dict, List
-from datetime import datetime
+from  typing import Dict, List
+from  datetime import datetime
 import json
 import logging
 
@@ -45,7 +45,7 @@ class LatencyTracker:
         return duration_ms
     
     def get_total_latency(self) -> float:
-        """Get total pipeline latency from start"""
+        """Get total pipeline latency from  start"""
         return (time.time() - self.start_time) * 1000
     
     def get_breakdown(self) -> Dict[str, float]:
@@ -106,7 +106,7 @@ class LatencyMonitor:
             report = tracker.get_report()
             
             # Save individual component metrics
-            frommodels.models import LatencyMetric
+            from models.models import LatencyMetric
             
             for component, duration in report["breakdown"].items():
                 metric = LatencyMetric(

@@ -3,7 +3,7 @@
  */
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from  'react';
 
 export interface WaveformProps {
   audioLevel: number;
@@ -15,7 +15,7 @@ export interface WaveformProps {
 export const Waveform: React.FC<WaveformProps> = ({
   audioLevel,
   isRecording,
-  color = 'from-cyan-400 to-blue-500',
+  color = 'from -cyan-400 to-blue-500',
   height = 64,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);

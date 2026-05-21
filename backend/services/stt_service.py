@@ -5,15 +5,15 @@ import os
 import io
 import time
 import tempfile
-from pathlib import Path
-from typing import Optional, Tuple
+from  pathlib import Path
+from  typing import Optional, Tuple
 
 class STTService:
     """Speech-to-Text service using Whisper"""
     
     def __init__(self):
         try:
-            from openai import AsyncOpenAI
+            from  openai import AsyncOpenAI
             self.client = AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY"))
         except Exception as e:
             print(f"Error initializing STT service: {e}")
@@ -107,7 +107,7 @@ class TTSService:
         
         if provider == "openai":
             try:
-                from openai import AsyncOpenAI
+                from  openai import AsyncOpenAI
                 self.client = AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY"))
             except Exception as e:
                 print(f"Error initializing TTS service: {e}")

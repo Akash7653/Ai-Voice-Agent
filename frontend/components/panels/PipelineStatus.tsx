@@ -1,8 +1,8 @@
 'use client';
 
-import React from 'react';
-import GlassCard from '@/components/ui/GlassCard';
-import { PipelineStage } from '@/types';
+import React from  'react';
+import GlassCard from  '@/components/ui/GlassCard';
+import { PipelineStage } from  '@/types';
 
 const STAGES: { id: PipelineStage; label: string }[] = [
   { id: 'speech', label: 'Speech' },

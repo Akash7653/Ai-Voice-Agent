@@ -1,6 +1,6 @@
-import type { Metadata } from 'next';
+import type { Metadata } from  'next';
 import './globals.css';
-import AppShell from '@/components/layout/AppShell';
+import AppShell from  '@/components/layout/AppShell';
 
 export const metadata: Metadata = {
   title: 'Voice Healthcare Agent',

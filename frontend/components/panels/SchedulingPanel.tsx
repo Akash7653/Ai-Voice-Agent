@@ -1,6 +1,6 @@
 'use client';
 
-import GlassCard from '@/components/ui/GlassCard';
+import GlassCard from  '@/components/ui/GlassCard';
 
 export default function SchedulingPanel({
   suggestedSlots,
@@ -18,7 +18,7 @@ export default function SchedulingPanel({
       )}
       {hasSlots ? (
         <div>
-          <p className="text-xs text-rose-400/70 mb-2">Alternative slots (from agent response)</p>
+          <p className="text-xs text-rose-400/70 mb-2">Alternative slots (from  agent response)</p>
           <ul className="space-y-1">
             {suggestedSlots.map((slot) => (
               <li key={slot} className="text-sm text-rose-200">

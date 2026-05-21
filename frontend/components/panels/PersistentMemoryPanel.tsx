@@ -1,8 +1,8 @@
 'use client';
 
-import GlassCard from '@/components/ui/GlassCard';
-import { languageLabel } from '@/lib/languages';
-import { PatientInfo } from '@/types';
+import GlassCard from  '@/components/ui/GlassCard';
+import { languageLabel } from  '@/lib/languages';
+import { PatientInfo } from  '@/types';
 
 export default function PersistentMemoryPanel({ patient }: { patient: PatientInfo | null }) {
   return (

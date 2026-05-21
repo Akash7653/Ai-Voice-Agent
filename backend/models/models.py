@@ -1,14 +1,14 @@
 """
 SQLAlchemy ORM models for database schema
 """
-from datetime import datetime
-from sqlalchemy import Column, Integer, String, DateTime, Float, Boolean, Text, Enum, ForeignKey, JSON
-from sqlalchemy.orm import relationship
-from sqlalchemy.dialects.postgresql import TIMESTAMP, UUID
+from  datetime import datetime
+from  sqlalchemy import Column, Integer, String, DateTime, Float, Boolean, Text, Enum, ForeignKey, JSON
+from  sqlalchemy.orm import relationship
+from  sqlalchemy.dialects.postgresql import TIMESTAMP, UUID
 import uuid
 import enum
 
-fromdb.database import Base
+from db.database import Base
 
 class AppointmentStatus(str, enum.Enum):
     SCHEDULED = "scheduled"
