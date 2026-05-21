@@ -1,0 +1,96 @@
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: voice_agent_postgres
+    environment:
+      POSTGRES_USER: ${DB_USER:-voice_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-voice_password}
+      POSTGRES_DB: ${DB_NAME:-voice_agent_db}
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backend/db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U voice_user -d voice_agent_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - voice_network
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: voice_agent_redis
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - voice_network
+
+  # FastAPI Backend
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: voice_agent_backend
+    environment:
+      ENV: ${ENV:-development}
+      DEBUG: ${DEBUG:-False}
+      API_HOST: 0.0.0.0
+      API_PORT: 8000
+      DATABASE_URL: postgresql://voice_user:voice_password@postgres:5432/voice_agent_db
+      REDIS_URL: redis://redis:6379
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      OPENAI_MODEL: ${OPENAI_MODEL:-gpt-4o-mini}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:3000}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./backend:/app/backend
+      - backend_logs:/app/logs
+    networks:
+      - voice_network
+    command: python -m uvicorn backend.main:app --host 0.0.0.0 --port 8000 --reload
+
+  # Next.js Frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: voice_agent_frontend
+    environment:
+      NEXT_PUBLIC_API_URL: ${FRONTEND_API_URL:-http://localhost:8000}
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    networks:
+      - voice_network
+    command: npm run dev
+
+volumes:
+  postgres_data:
+  redis_data:
+  backend_logs:
+
+networks:
+  voice_network:
+    driver: bridge

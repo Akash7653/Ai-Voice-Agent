@@ -1,0 +1,23 @@
+# Python
+.venv
+__pycache__
+*.pyc
+
+# Node
+node_modules
+.next
+
+# Environment
+.env
+.env.local
+
+# Logs
+logs
+*.log
+
+# Audio
+debug_audio.webm
+
+# OS
+Thumbs.db
+.DS_Store
