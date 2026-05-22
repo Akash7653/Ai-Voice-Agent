@@ -38,7 +38,7 @@ class VoiceAgentWebSocketHandler:
 
         self.db_session = db_session
 
-        # USE GLOBAL SINGLETON SERVICES
+        # GLOBAL SINGLETON SERVICES
         self.stt_service = stt_service
         self.tts_service = tts_service
         self.orchestrator = llm_service
@@ -87,7 +87,7 @@ class VoiceAgentWebSocketHandler:
             )
 
             logger.info(
-                f"WebSocket connected: {session_id}"
+                f"[WebSocket] Connected: {session_id}"
             )
 
             # SEND SESSION START
@@ -99,20 +99,45 @@ class VoiceAgentWebSocketHandler:
 
             while True:
 
-                message = await websocket.receive()
+                try:
 
-                # AUDIO DATA
+                    message = await websocket.receive()
+
+                except Exception as e:
+
+                    logger.warning(
+                        f"[WebSocket] Disconnected while receiving: {e}"
+                    )
+
+                    break
+
+                # =========================
+                # AUDIO CHUNKS
+                # =========================
+
                 if "bytes" in message:
 
                     audio_chunk = message["bytes"]
 
                     if audio_chunk:
+
                         audio_buffer.extend(audio_chunk)
 
-                # TEXT DATA
+                        logger.info(
+                            f"[Audio] Chunk received: {len(audio_chunk)} bytes"
+                        )
+
+                # =========================
+                # TEXT EVENTS
+                # =========================
+
                 elif "text" in message:
 
                     text_data = message["text"]
+
+                    logger.info(
+                        f"[WebSocket] Text message: {text_data}"
+                    )
 
                     # HEARTBEAT
                     if text_data == "ping":
@@ -126,11 +151,11 @@ class VoiceAgentWebSocketHandler:
                     # STOP RECORDING
                     if text_data == "STOP":
 
-                        if audio_buffer:
+                        logger.info(
+                            f"[Audio] Final buffer size: {len(audio_buffer)} bytes"
+                        )
 
-                            logger.info(
-                                f"[WebSocket] Audio buffer size: {len(audio_buffer)} bytes"
-                            )
+                        if audio_buffer:
 
                             await self._process_audio(
                                 websocket,
@@ -145,7 +170,7 @@ class VoiceAgentWebSocketHandler:
         except WebSocketDisconnect:
 
             logger.info(
-                f"WebSocket disconnected: {session_id}"
+                f"[WebSocket] Client disconnected: {session_id}"
             )
 
             await self._handle_disconnect(
@@ -154,15 +179,17 @@ class VoiceAgentWebSocketHandler:
 
         except Exception as e:
 
-            logger.error(
-                f"WebSocket error: {e}"
+            logger.exception(
+                f"[WebSocket ERROR] {e}"
             )
 
             try:
+
                 await websocket.send_json({
                     "type": "error",
                     "message": str(e),
                 })
+
             except:
                 pass
 
@@ -181,6 +208,10 @@ class VoiceAgentWebSocketHandler:
 
         try:
 
+            logger.info(
+                f"[PIPELINE] Processing audio: {len(audio_data)} bytes"
+            )
+
             session = await self.redis_memory.get_session(
                 session_id
             )
@@ -198,6 +229,10 @@ class VoiceAgentWebSocketHandler:
             # STT
             # =========================
 
+            logger.info(
+                "[PIPELINE] Starting STT..."
+            )
+
             latency_tracker.start("stt")
 
             stt_result = (
@@ -208,24 +243,42 @@ class VoiceAgentWebSocketHandler:
 
             latency_tracker.end("stt")
 
-            logger.info(f"[STT] Result: {stt_result}")
+            logger.info(
+                "[PIPELINE] STT completed"
+            )
 
-            if not stt_result["success"]:
+            logger.info(
+                f"[STT RESULT] {stt_result}"
+            )
+
+            if not stt_result.get("success"):
+
+                logger.error(
+                    f"[STT ERROR] {stt_result}"
+                )
 
                 await websocket.send_json({
                     "type": "error",
-                    "message": stt_result["error"],
+                    "message": stt_result.get(
+                        "error",
+                        "STT failed"
+                    ),
                 })
 
                 return
 
-            transcript = stt_result["text"]
+            transcript = stt_result.get(
+                "text",
+                ""
+            )
 
-            detected_language = (
-                stt_result.get(
-                    "language",
-                    "en"
-                )
+            detected_language = stt_result.get(
+                "language",
+                "en"
+            )
+
+            logger.info(
+                f"[TRANSCRIPT] {transcript}"
             )
 
             # SEND TRANSCRIPT
@@ -239,26 +292,52 @@ class VoiceAgentWebSocketHandler:
             # LLM
             # =========================
 
+            logger.info(
+                "[PIPELINE] Starting LLM..."
+            )
+
             latency_tracker.start("llm")
 
-            llm_result = await self.orchestrator.generate_response(
-                transcript
+            llm_result = (
+                await self.orchestrator.generate_response(
+                    transcript
+                )
             )
 
             latency_tracker.end("llm")
 
-            logger.info(f"[LLM] Result: {llm_result}")
+            logger.info(
+                "[PIPELINE] LLM completed"
+            )
 
-            if not llm_result["success"]:
+            logger.info(
+                f"[LLM RESULT] {llm_result}"
+            )
+
+            if not llm_result.get("success"):
+
+                logger.error(
+                    f"[LLM ERROR] {llm_result}"
+                )
 
                 await websocket.send_json({
                     "type": "error",
-                    "message": llm_result["error"],
+                    "message": llm_result.get(
+                        "error",
+                        "LLM failed"
+                    ),
                 })
 
                 return
 
-            response_text = llm_result["response"]
+            response_text = llm_result.get(
+                "response",
+                "Sorry, I could not respond."
+            )
+
+            logger.info(
+                f"[AI RESPONSE] {response_text}"
+            )
 
             # SEND RESPONSE
             await websocket.send_json({
@@ -271,6 +350,10 @@ class VoiceAgentWebSocketHandler:
             # TTS
             # =========================
 
+            logger.info(
+                "[PIPELINE] Starting TTS..."
+            )
+
             latency_tracker.start("tts")
 
             tts_result = (
@@ -282,9 +365,15 @@ class VoiceAgentWebSocketHandler:
 
             latency_tracker.end("tts")
 
-            logger.info(f"[TTS] Success: {tts_result['success']}")
+            logger.info(
+                "[PIPELINE] TTS completed"
+            )
 
-            if tts_result["success"]:
+            logger.info(
+                f"[TTS RESULT] {tts_result.get('success')}"
+            )
+
+            if tts_result.get("success"):
 
                 audio_base64 = (
                     base64.b64encode(
@@ -292,9 +381,27 @@ class VoiceAgentWebSocketHandler:
                     ).decode("utf-8")
                 )
 
+                logger.info(
+                    "[AUDIO] Sending audio response"
+                )
+
                 await websocket.send_json({
                     "type": "audio_response",
                     "audio": audio_base64,
+                })
+
+            else:
+
+                logger.error(
+                    f"[TTS ERROR] {tts_result}"
+                )
+
+                await websocket.send_json({
+                    "type": "error",
+                    "message": tts_result.get(
+                        "error",
+                        "TTS failed"
+                    ),
                 })
 
             # =========================
@@ -303,6 +410,10 @@ class VoiceAgentWebSocketHandler:
 
             latency_report = (
                 latency_tracker.get_report()
+            )
+
+            logger.info(
+                f"[LATENCY] {latency_report}"
             )
 
             await websocket.send_json({
@@ -317,7 +428,10 @@ class VoiceAgentWebSocketHandler:
                     ],
             })
 
+            # =========================
             # UPDATE SESSION
+            # =========================
+
             await self.redis_memory.update_session(
                 session_id,
                 {
@@ -329,19 +443,24 @@ class VoiceAgentWebSocketHandler:
             )
 
             logger.info(
-                f"Processed request: {session_id}"
+                f"[SUCCESS] Request processed: {session_id}"
             )
 
         except Exception as e:
 
-            logger.error(
-                f"Audio processing error: {e}"
+            logger.exception(
+                f"[PIPELINE ERROR] {e}"
             )
 
-            await websocket.send_json({
-                "type": "error",
-                "message": "Failed to process audio",
-            })
+            try:
+
+                await websocket.send_json({
+                    "type": "error",
+                    "message": str(e),
+                })
+
+            except:
+                pass
 
     async def _handle_disconnect(
         self,
@@ -350,6 +469,10 @@ class VoiceAgentWebSocketHandler:
 
         try:
 
+            logger.info(
+                f"[DISCONNECT] Cleaning session: {session_id}"
+            )
+
             await self.redis_memory.delete_session(
                 session_id
             )
@@ -357,5 +480,5 @@ class VoiceAgentWebSocketHandler:
         except Exception as e:
 
             logger.error(
-                f"Disconnect cleanup error: {e}"
+                f"[DISCONNECT ERROR] {e}"
             )
