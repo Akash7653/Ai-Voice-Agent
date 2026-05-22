@@ -172,6 +172,28 @@ export class APIClient {
     return this.fetchWithErrorHandling(url.toString());
   }
 
+  async createAppointment(payload: any): Promise<any> {
+    return this.fetchWithErrorHandling(`${this.baseUrl}/api/appointments`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+  }
+
+  async rescheduleAppointment(appointmentId: string, payload: any): Promise<any> {
+    return this.fetchWithErrorHandling(`${this.baseUrl}/api/appointments/${appointmentId}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+  }
+
+  async cancelAppointment(appointmentId: string): Promise<any> {
+    return this.fetchWithErrorHandling(`${this.baseUrl}/api/appointments/${appointmentId}`, {
+      method: 'DELETE',
+    });
+  }
+
   async getDoctors(specialty?: string): Promise<any> {
     const url = new URL(`${this.baseUrl}/api/doctors`);
     if (specialty) {
@@ -206,5 +228,13 @@ export class APIClient {
     url.searchParams.append('limit', limit.toString());
 
     return this.fetchWithErrorHandling(url.toString());
+  }
+
+  async generateTTS(text: string, language: string = 'en', sessionId?: string): Promise<any> {
+    return this.fetchWithErrorHandling(`${this.baseUrl}/api/tts`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text, language, session_id: sessionId }),
+    });
   }
 }

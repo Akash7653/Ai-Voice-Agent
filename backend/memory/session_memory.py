@@ -11,6 +11,7 @@ from datetime import datetime
 from typing import Dict, Any, Optional
 
 from upstash_redis import Redis
+import uuid
 
 
 class RedisMemoryManager:
@@ -163,6 +164,53 @@ class RedisMemoryManager:
         except Exception as e:
             print(f"Error getting context: {e}")
             return None
+
+    # -----------------
+    # Simple distributed lock helpers
+    # -----------------
+
+    async def acquire_lock(self, key: str, ttl: int = 30) -> Optional[str]:
+        """Attempt to acquire a lock for `key`. Returns token string if acquired, else None."""
+
+        try:
+            lock_key = f"lock:{key}"
+            token = str(uuid.uuid4())
+
+            # set NX with expiry
+            ok = self.client.set(lock_key, token, ex=ttl, nx=True)
+
+            if ok:
+                return token
+
+            return None
+
+        except Exception as e:
+            print(f"Error acquiring lock {key}: {e}")
+            return None
+
+    async def release_lock(self, key: str, token: str) -> bool:
+        """Release lock only if token matches owner."""
+
+        try:
+            lock_key = f"lock:{key}"
+            val = self.client.get(lock_key)
+
+            if not val:
+                return True
+
+            # upstash returns bytes/str depending; ensure str
+            if isinstance(val, bytes):
+                val = val.decode("utf-8")
+
+            if val == token:
+                self.client.delete(lock_key)
+                return True
+
+            return False
+
+        except Exception as e:
+            print(f"Error releasing lock {key}: {e}")
+            return False
 
 
 class PersistentMemoryManager:

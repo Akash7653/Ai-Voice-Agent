@@ -259,7 +259,12 @@ export default function VoiceConsole() {
             />
             <PersistentMemoryPanel patient={patient} />
             <LatencyPanel metrics={voice.latencyMetrics} />
-            <SchedulingPanel suggestedSlots={suggestedSlots} conflictMessage={conflictHint} />
+            <SchedulingPanel
+              suggestedSlots={suggestedSlots}
+              conflictMessage={conflictHint}
+              reasoning={voice.reasoning}
+              onActionComplete={() => refreshPatient()}
+            />
           </div>
         </div>
       </div>
