@@ -7,18 +7,11 @@ import logging
 import time
 import uuid
 
-from typing import Dict, Any, Optional
-
 from fastapi import WebSocket, WebSocketDisconnect
-
-from services.stt_service import STTService
-from services.tts_service import TTSService
 
 from services.language_detection import (
     LanguageDetectionService,
 )
-
-from agent.orchestrator.llm_orchestrator import LLMService
 
 from memory.session_memory import (
     RedisMemoryManager,
@@ -35,21 +28,24 @@ logger = logging.getLogger(__name__)
 class VoiceAgentWebSocketHandler:
     """Handles WebSocket voice conversations"""
 
-    def __init__(self, db_session=None):
+    def __init__(
+        self,
+        db_session=None,
+        stt_service=None,
+        tts_service=None,
+        llm_service=None,
+    ):
 
         self.db_session = db_session
 
-        # FREE STT
-        self.stt_service = STTService()
-
-        # FREE TTS
-        self.tts_service = TTSService()
+        # USE GLOBAL SINGLETON SERVICES
+        self.stt_service = stt_service
+        self.tts_service = tts_service
+        self.orchestrator = llm_service
 
         self.language_detector = (
             LanguageDetectionService()
         )
-
-        self.orchestrator = LLMService()
 
         self.redis_memory = (
             RedisMemoryManager()
@@ -77,8 +73,6 @@ class VoiceAgentWebSocketHandler:
 
         try:
 
-            
-
             # CREATE SESSION
             await self.redis_memory.set_session(
                 session_id,
@@ -100,16 +94,14 @@ class VoiceAgentWebSocketHandler:
             await websocket.send_json({
                 "type": "session_start",
                 "session_id": session_id,
-                "message":
-                    "Voice agent ready",
+                "message": "Voice agent ready",
             })
 
-            # MAIN LOOP
             while True:
 
                 message = await websocket.receive()
 
-                # AUDIO CHUNK
+                # AUDIO DATA
                 if "bytes" in message:
 
                     audio_chunk = message["bytes"]
@@ -117,14 +109,28 @@ class VoiceAgentWebSocketHandler:
                     if audio_chunk:
                         audio_buffer.extend(audio_chunk)
 
-                # CLIENT SENT STOP
+                # TEXT DATA
                 elif "text" in message:
 
                     text_data = message["text"]
 
+                    # HEARTBEAT
+                    if text_data == "ping":
+
+                        await websocket.send_json({
+                            "type": "pong"
+                        })
+
+                        continue
+
+                    # STOP RECORDING
                     if text_data == "STOP":
 
                         if audio_buffer:
+
+                            logger.info(
+                                f"[WebSocket] Audio buffer size: {len(audio_buffer)} bytes"
+                            )
 
                             await self._process_audio(
                                 websocket,
@@ -202,12 +208,13 @@ class VoiceAgentWebSocketHandler:
 
             latency_tracker.end("stt")
 
+            logger.info(f"[STT] Result: {stt_result}")
+
             if not stt_result["success"]:
 
                 await websocket.send_json({
                     "type": "error",
-                    "message":
-                        stt_result["error"],
+                    "message": stt_result["error"],
                 })
 
                 return
@@ -225,8 +232,7 @@ class VoiceAgentWebSocketHandler:
             await websocket.send_json({
                 "type": "transcript",
                 "text": transcript,
-                "language":
-                    detected_language,
+                "language": detected_language,
             })
 
             # =========================
@@ -235,144 +241,30 @@ class VoiceAgentWebSocketHandler:
 
             latency_tracker.start("llm")
 
-            reasoning_result, _ = (
-                await self.orchestrator.reason_and_plan(
-                    user_input=transcript,
-                    language=detected_language,
-                    session_context=session.get(
-                        "context",
-                        {}
-                    ),
-                )
+            llm_result = await self.orchestrator.generate_response(
+                transcript
             )
 
             latency_tracker.end("llm")
 
-            # SEND REASONING TRACE
-            await websocket.send_json({
-                "type": "reasoning_trace",
-                "intent":
-                    reasoning_result.get(
-                        "intent"
-                    ),
+            logger.info(f"[LLM] Result: {llm_result}")
 
-                "confidence":
-                    reasoning_result.get(
-                        "confidence",
-                        0,
-                    ),
+            if not llm_result["success"]:
 
-                "entities":
-                    reasoning_result.get(
-                        "entities",
-                        {}
-                    ),
+                await websocket.send_json({
+                    "type": "error",
+                    "message": llm_result["error"],
+                })
 
-                "reasoning":
-                    reasoning_result.get(
-                        "reasoning",
-                        ""
-                    ),
-            })
+                return
 
-            # =========================
-            # TOOL EXECUTION
-            # =========================
+            response_text = llm_result["response"]
 
-            tool_result = None
-
-            if (
-                reasoning_result.get(
-                    "intent"
-                )
-                != "small_talk"
-            ):
-
-                latency_tracker.start(
-                    "tools"
-                )
-
-                intent_to_tool = {
-                    "book_appointment":
-                        "book_appointment",
-
-                    "reschedule_appointment":
-                        "reschedule_appointment",
-
-                    "cancel_appointment":
-                        "cancel_appointment",
-
-                    "check_availability":
-                        "check_availability",
-                }
-
-                tool_name = (
-                    intent_to_tool.get(
-                        reasoning_result.get(
-                            "intent"
-                        )
-                    )
-                )
-
-                if tool_name:
-
-                    tool_args = (
-                        reasoning_result.get(
-                            "entities",
-                            {}
-                        )
-                    )
-
-                    tool_args[
-                        "patient_id"
-                    ] = patient_id
-
-                    tool_result = (
-                        await self.orchestrator.execute_tool(
-                            tool_name,
-                            tool_args,
-                            language=
-                                detected_language,
-                        )
-                    )
-
-                latency_tracker.end(
-                    "tools"
-                )
-
-            # =========================
-            # RESPONSE
-            # =========================
-
-            if (
-                tool_result
-                and tool_result.get(
-                    "success"
-                )
-            ):
-
-                response_text = (
-                    tool_result.get(
-                        "message",
-                        "Done",
-                    )
-                )
-
-            else:
-
-                response_text = (
-                    reasoning_result.get(
-                        "response",
-                        "I could not process your request.",
-                    )
-                )
-
-            # SEND TEXT RESPONSE
+            # SEND RESPONSE
             await websocket.send_json({
                 "type": "response",
                 "text": response_text,
-                "language":
-                    detected_language,
+                "language": detected_language,
             })
 
             # =========================
@@ -390,7 +282,8 @@ class VoiceAgentWebSocketHandler:
 
             latency_tracker.end("tts")
 
-            # SEND AUDIO
+            logger.info(f"[TTS] Success: {tts_result['success']}")
+
             if tts_result["success"]:
 
                 audio_base64 = (
@@ -401,8 +294,7 @@ class VoiceAgentWebSocketHandler:
 
                 await websocket.send_json({
                     "type": "audio_response",
-                    "audio":
-                        audio_base64,
+                    "audio": audio_base64,
                 })
 
             # =========================
@@ -419,7 +311,6 @@ class VoiceAgentWebSocketHandler:
                     latency_report[
                         "total_latency_ms"
                     ],
-
                 "breakdown":
                     latency_report[
                         "breakdown"
@@ -431,14 +322,9 @@ class VoiceAgentWebSocketHandler:
                 session_id,
                 {
                     "state": "listening",
-                    "last_response":
-                        response_text,
-
-                    "transcript":
-                        transcript,
-
-                    "language":
-                        detected_language,
+                    "last_response": response_text,
+                    "transcript": transcript,
+                    "language": detected_language,
                 },
             )
 
@@ -454,8 +340,7 @@ class VoiceAgentWebSocketHandler:
 
             await websocket.send_json({
                 "type": "error",
-                "message":
-                    "Failed to process audio",
+                "message": "Failed to process audio",
             })
 
     async def _handle_disconnect(
