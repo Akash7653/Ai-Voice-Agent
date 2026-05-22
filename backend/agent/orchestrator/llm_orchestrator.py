@@ -2,7 +2,7 @@ import google.generativeai as genai
 import os
 
 
-class LLMService:
+class LLMOrchestrator:
 
     def __init__(self):
 
@@ -14,67 +14,34 @@ class LLMService:
             "gemini-1.5-flash"
         )
 
-    async def reason_and_plan(
+    async def generate_response(
         self,
-        user_input: str,
-        language: str = "en",
-        session_context=None,
+        prompt: str
     ):
 
         try:
 
-            prompt = f"""
-            You are a healthcare voice AI assistant.
-
-            User said:
-            {user_input}
-
-            Detect:
-            - intent
-            - entities
-            - response
-
-            Return conversational response.
-            """
-
             response = self.model.generate_content(
-                prompt
+                f"""
+                You are a helpful AI healthcare assistant.
+
+                Patient said:
+                {prompt}
+
+                Give short helpful response.
+                """
             )
 
-            return (
-                {
-                    "intent": "general_query",
-                    "confidence": 0.95,
-                    "entities": {},
-                    "reasoning": "Gemini reasoning completed",
-                    "response": response.text,
-                },
-                None,
-            )
+            return {
+                "success": True,
+                "response": response.text
+            }
 
         except Exception as e:
 
-            return (
-                {
-                    "intent": "error",
-                    "confidence": 0,
-                    "entities": {},
-                    "reasoning": str(e),
-                    "response":
-                        "I could not process your request.",
-                },
-                None,
-            )
+            print(f"[LLM ERROR] {e}")
 
-    async def execute_tool(
-        self,
-        tool_name,
-        tool_args,
-        language="en",
-    ):
-
-        return {
-            "success": True,
-            "message":
-                "Tool execution simulated successfully.",
-        }
+            return {
+                "success": False,
+                "response": "Sorry, I could not process your request."
+            }
