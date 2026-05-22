@@ -254,7 +254,7 @@ async def get_patient_info(
         result = await db.execute(
             select(PatientMemory).where(
                 PatientMemory.patient_id == patient_id
-            )@
+            )
         )
 
         patient = result.scalar_one_or_none()
