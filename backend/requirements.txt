@@ -23,7 +23,6 @@ httpx==0.25.2
 faster-whisper
 edge-tts
 google-generativeai
-googletrans==4.0.0rc1
 
 ctranslate2
 onnxruntime

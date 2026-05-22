@@ -13,12 +13,18 @@ class STTService:
             compute_type="int8"
         )
 
+        print("[STT] Faster Whisper initialized")
+
     async def transcribe_audio(
         self,
         audio_bytes: bytes
     ):
 
         try:
+
+            print(
+                f"[STT] Audio received: {len(audio_bytes)} bytes"
+            )
 
             with tempfile.NamedTemporaryFile(
                 delete=False,
@@ -40,6 +46,10 @@ class STTService:
 
             os.remove(temp_path)
 
+            print(
+                f"[STT] Transcribed: {text}"
+            )
+
             return {
                 "success": True,
                 "text": text,
@@ -47,6 +57,8 @@ class STTService:
             }
 
         except Exception as e:
+
+            print(f"[STT] Error: {e}")
 
             return {
                 "success": False,
