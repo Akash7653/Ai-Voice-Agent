@@ -64,18 +64,38 @@ app.add_middleware(
 )
 
 # WebSocket endpoint
+# WebSocket endpoint
 @app.websocket("/ws/voice/{patient_id}")
-async def websocket_voice_endpoint(websocket: WebSocket, patient_id: str, db: AsyncSession = Depends(get_db)):
+async def websocket_voice_endpoint(
+    websocket: WebSocket,
+    patient_id: str,
+    db: AsyncSession = Depends(get_db)
+):
     """
     WebSocket endpoint for voice interaction
     Path: /ws/voice/{patient_id}
     """
-    handler = VoiceAgentWebSocketHandler(db_session=db)
-    await handler.handle_connection(
-    websocket,
-    patient_id
-)
 
+    try:
+        await websocket.accept()
+
+        logger.info(
+            f"WebSocket connected for patient: {patient_id}"
+        )
+
+        handler = VoiceAgentWebSocketHandler(
+            db_session=db
+        )
+
+        await handler.handle_connection(
+            websocket,
+            patient_id
+        )
+
+    except Exception as e:
+        logger.error(
+            f"WebSocket error: {e}"
+        )
 # REST API endpoints
 
 @app.get("/health")
