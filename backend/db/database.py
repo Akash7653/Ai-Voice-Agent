@@ -3,12 +3,12 @@ Database connection and session management
 """
 
 import os
-from  sqlalchemy.ext.asyncio import (
+from sqlalchemy.ext.asyncio import (
     create_async_engine,
     AsyncSession,
     async_sessionmaker,
 )
-from  sqlalchemy.orm import declarative_base
+from sqlalchemy.orm import declarative_base
 
 DATABASE_URL = os.getenv(
     "DATABASE_URL",
@@ -27,10 +27,7 @@ engine = create_async_engine(
     DATABASE_URL,
     echo=os.getenv("DEBUG", "False").lower() == "true",
     pool_pre_ping=True,
-    pool_size=20,
-    max_overflow=40,
     connect_args={
-        "statement_cache_size": 0,
         "ssl": "require",
     },
 )
@@ -40,8 +37,6 @@ AsyncSessionLocal = async_sessionmaker(
     engine,
     class_=AsyncSession,
     expire_on_commit=False,
-    autocommit=False,
-    autoflush=False,
 )
 
 # Base model
@@ -49,7 +44,6 @@ Base = declarative_base()
 
 
 async def get_db():
-    """Get database session"""
     async with AsyncSessionLocal() as session:
         try:
             yield session
@@ -58,11 +52,9 @@ async def get_db():
 
 
 async def init_db():
-    """Initialize database"""
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
 
 
 async def close_db():
-    """Close database"""
     await engine.dispose()
