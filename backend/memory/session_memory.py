@@ -1,11 +1,172 @@
-from upstash_redis import Redis
+"""
+Memory management for sessions and persistent data
+Uses Upstash Redis for session memory
+Uses PostgreSQL for persistent patient memory
+"""
+
 import os
 import json
+
+from datetime import datetime
 from typing import Dict, Any, Optional
+
+from upstash_redis import Redis
 
 
 class RedisMemoryManager:
     """Session memory using Upstash Redis"""
+
+    def __init__(self):
+        self.client = Redis(
+            url=os.getenv("UPSTASH_REDIS_REST_URL"),
+            token=os.getenv("UPSTASH_REDIS_REST_TOKEN"),
+        )
+
+        self.ttl = int(
+            os.getenv("SESSION_TTL", 3600)
+        )
+
+    async def set_session(
+        self,
+        session_id: str,
+        data: Dict[str, Any]
+    ) -> bool:
+        """Store session data with TTL"""
+
+        try:
+            key = f"session:{session_id}"
+
+            self.client.set(
+                key,
+                json.dumps(data),
+                ex=self.ttl
+            )
+
+            return True
+
+        except Exception as e:
+            print(f"Error setting session: {e}")
+            return False
+
+    async def get_session(
+        self,
+        session_id: str
+    ) -> Optional[Dict[str, Any]]:
+        """Retrieve session data"""
+
+        try:
+            key = f"session:{session_id}"
+
+            data = self.client.get(key)
+
+            if not data:
+                return None
+
+            return json.loads(data)
+
+        except Exception as e:
+            print(f"Error getting session: {e}")
+            return None
+
+    async def update_session(
+        self,
+        session_id: str,
+        updates: Dict[str, Any]
+    ) -> bool:
+        """Update session fields"""
+
+        try:
+            session = await self.get_session(session_id)
+
+            if session:
+                session.update(updates)
+
+                await self.set_session(
+                    session_id,
+                    session
+                )
+
+                return True
+
+            return False
+
+        except Exception as e:
+            print(f"Error updating session: {e}")
+            return False
+
+    async def delete_session(
+        self,
+        session_id: str
+    ) -> bool:
+        """Delete session"""
+
+        try:
+            key = f"session:{session_id}"
+
+            self.client.delete(key)
+
+            return True
+
+        except Exception as e:
+            print(f"Error deleting session: {e}")
+            return False
+
+    async def set_context(
+        self,
+        session_id: str,
+        key: str,
+        value: Any
+    ) -> bool:
+        """Set session context"""
+
+        try:
+            session = await self.get_session(session_id)
+
+            if not session:
+                session = {}
+
+            context = session.get("context", {})
+
+            context[key] = value
+
+            session["context"] = context
+
+            await self.set_session(
+                session_id,
+                session
+            )
+
+            return True
+
+        except Exception as e:
+            print(f"Error setting context: {e}")
+            return False
+
+    async def get_context(
+        self,
+        session_id: str,
+        key: str
+    ) -> Optional[Any]:
+        """Get session context"""
+
+        try:
+            session = await self.get_session(session_id)
+
+            if session:
+                return session.get(
+                    "context",
+                    {}
+                ).get(key)
+
+            return None
+
+        except Exception as e:
+            print(f"Error getting context: {e}")
+            return None
+
+
+class PersistentMemoryManager:
+    """Persistent memory using PostgreSQL"""
 
     def __init__(self, db_session):
         self.db_session = db_session
@@ -17,6 +178,7 @@ class RedisMemoryManager:
         doctor: Optional[str] = None,
         conversation_summary: Optional[str] = None
     ) -> bool:
+        """Save or update patient memory"""
 
         from models.models import PatientMemory
         from sqlalchemy import select
@@ -37,10 +199,15 @@ class RedisMemoryManager:
                     memory.preferred_doctor = doctor
 
                 if conversation_summary:
-                    memory.conversation_summary = conversation_summary
+                    memory.conversation_summary = (
+                        conversation_summary
+                    )
 
                 memory.interaction_count += 1
-                memory.last_interaction = datetime.utcnow()
+
+                memory.last_interaction = (
+                    datetime.utcnow()
+                )
 
             else:
                 memory = PatientMemory(
@@ -68,6 +235,7 @@ class RedisMemoryManager:
         self,
         patient_id: str
     ) -> Optional[Dict[str, Any]]:
+        """Retrieve patient memory"""
 
         from models.models import PatientMemory
         from sqlalchemy import select
@@ -83,15 +251,24 @@ class RedisMemoryManager:
 
             if memory:
                 return {
-                    "preferred_language": memory.preferred_language,
-                    "preferred_doctor": memory.preferred_doctor,
-                    "interaction_count": memory.interaction_count,
-                    "last_interaction": (
-                        memory.last_interaction.isoformat()
-                        if memory.last_interaction
-                        else None
-                    ),
-                    "conversation_summary": memory.conversation_summary,
+                    "preferred_language":
+                        memory.preferred_language,
+
+                    "preferred_doctor":
+                        memory.preferred_doctor,
+
+                    "interaction_count":
+                        memory.interaction_count,
+
+                    "last_interaction":
+                        (
+                            memory.last_interaction.isoformat()
+                            if memory.last_interaction
+                            else None
+                        ),
+
+                    "conversation_summary":
+                        memory.conversation_summary,
                 }
 
             return None
