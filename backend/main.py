@@ -72,7 +72,7 @@ logger = logging.getLogger(__name__)
 
 stt_service = STTService()
 tts_service = TTSService()
-llm_service = LLMService()
+llm_service = LLMOrchestrator()
 
 redis_memory = RedisMemoryManager()
 
