@@ -77,7 +77,7 @@ class VoiceAgentWebSocketHandler:
 
         try:
 
-            await websocket.accept()
+            
 
             # CREATE SESSION
             await self.redis_memory.set_session(

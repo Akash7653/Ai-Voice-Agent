@@ -7,6 +7,8 @@ class STTService:
 
     def __init__(self):
 
+        print("[STT] Loading Faster Whisper model...")
+
         self.model = WhisperModel(
             "tiny",
             device="cpu",
@@ -17,38 +19,29 @@ class STTService:
 
     async def transcribe_audio(
         self,
-        audio_bytes: bytes
+        audio_data: bytes
     ):
 
         try:
-
-            print(
-                f"[STT] Audio received: {len(audio_bytes)} bytes"
-            )
 
             with tempfile.NamedTemporaryFile(
                 delete=False,
                 suffix=".wav"
             ) as temp_audio:
 
-                temp_audio.write(audio_bytes)
+                temp_audio.write(audio_data)
 
-                temp_path = temp_audio.name
+                temp_audio_path = temp_audio.name
 
             segments, info = self.model.transcribe(
-                temp_path,
-                beam_size=1
+                temp_audio_path
             )
 
             text = " ".join(
                 [segment.text for segment in segments]
             )
 
-            os.remove(temp_path)
-
-            print(
-                f"[STT] Transcribed: {text}"
-            )
+            os.remove(temp_audio_path)
 
             return {
                 "success": True,
@@ -57,8 +50,6 @@ class STTService:
             }
 
         except Exception as e:
-
-            print(f"[STT] Error: {e}")
 
             return {
                 "success": False,
