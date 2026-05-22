@@ -284,7 +284,7 @@ async def general_exception_handler(request, exc):
         "error": "Internal server error"
     }
 
-   @app.get("/")
+@app.get("/")
 async def root():
     return {"message": "Voice AI Healthcare Agent Running"} 
 
