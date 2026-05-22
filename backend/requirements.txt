@@ -14,3 +14,4 @@ elevenlabs==0.2.11
 textblob==0.17.1
 apscheduler==3.10.4
 httpx==0.25.2
+asyncpg==0.30.0

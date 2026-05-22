@@ -3,12 +3,15 @@ Database connection and session management
 """
 
 import os
+
 from sqlalchemy.ext.asyncio import (
     create_async_engine,
     AsyncSession,
     async_sessionmaker,
 )
+
 from sqlalchemy.orm import declarative_base
+from sqlalchemy.pool import NullPool
 
 DATABASE_URL = os.getenv(
     "DATABASE_URL",
@@ -22,24 +25,22 @@ if DATABASE_URL.startswith("postgresql://"):
         "postgresql+asyncpg://"
     )
 
-# Create async engine
 engine = create_async_engine(
     DATABASE_URL,
-    echo=os.getenv("DEBUG", "False").lower() == "true",
-    pool_pre_ping=True,
+    echo=False,
+    poolclass=NullPool,
     connect_args={
+        "statement_cache_size": 0,
         "ssl": "require",
     },
 )
 
-# Session factory
 AsyncSessionLocal = async_sessionmaker(
     engine,
     class_=AsyncSession,
     expire_on_commit=False,
 )
 
-# Base model
 Base = declarative_base()
 
 
