@@ -142,7 +142,12 @@ export function useVoiceWebSocket(apiUrl: string, patientId: string) {
   const [sessionId, setSessionId] = useState<string | null>(null);
 
   const connect = useCallback(async () => {
-    const client = new VoiceClient(apiUrl, patientId);
+  const client = new VoiceClient(apiUrl, patientId);
+    client.onConnected(() => {
+      connectedRef.current = true;
+      setIsConnected(true);
+      setError(null);
+      });
 
     client.onMessageReceived((message) => {
       if (message.type === 'session_start' && message.session_id) {
@@ -185,8 +190,6 @@ export function useVoiceWebSocket(apiUrl: string, patientId: string) {
 
     await client.connect();
     clientRef.current = client;
-    connectedRef.current = true;
-    setIsConnected(true);
     setError(null);
   }, [apiUrl, patientId]);
 

@@ -10,6 +10,7 @@ export class VoiceClient {
   private onMessage: (message: WebSocketMessage) => void = () => {};
   private onError: (error: string) => void = () => {};
   private onClose: () => void = () => {};
+  private onConnectedCallback: () => void = () => {};
 
   constructor(
     private apiUrl: string,
@@ -35,7 +36,14 @@ export class VoiceClient {
 
         this.ws.onopen = () => {
           clearTimeout(connectionTimeout);
+        
           console.log('WebSocket connected successfully');
+        
+          this.onConnectedCallback();
+        
+          if (this.sessionId) {
+            resolve(this.sessionId);
+          }
         };
 
         this.ws.onmessage = (event) => {
@@ -59,7 +67,11 @@ export class VoiceClient {
 
         this.ws.onclose = () => {
           clearTimeout(connectionTimeout);
+        
           console.log('WebSocket closed');
+        
+          this.ws = null;
+        
           this.onClose();
         };
       } catch (error) {
@@ -95,6 +107,9 @@ export class VoiceClient {
 
   onConnectionClosed(handler: () => void): void {
     this.onClose = handler;
+  }
+  onConnected(handler: () => void): void {
+    this.onConnectedCallback = handler;
   }
 
   disconnect(): void {
