@@ -311,10 +311,54 @@ async def get_latency_stats(
 
         logger.error(f"Error fetching latency stats: {e}")
 
-        raise HTTPException(
-            status_code=500,
-            detail="Error fetching latency stats"
-        )
+        # Fallback for asyncpg DuplicatePreparedStatementError when using pgbouncer
+        try:
+            import asyncpg
+            from db.database import DATABASE_URL
+
+            logger.info("Attempting fallback query via asyncpg with statement_cache_size=0 for latency stats")
+
+            conn = await asyncpg.connect(DATABASE_URL, statement_cache_size=0)
+
+            # fetch recent session ids
+            rows = await conn.fetch(
+                "SELECT session_id FROM conversation_log WHERE patient_id = $1 ORDER BY created_at DESC LIMIT $2",
+                patient_id,
+                limit,
+            )
+
+            sessions = [r["session_id"] for r in rows]
+
+            if not sessions:
+                await conn.close()
+                return {"success": True, "data": []}
+
+            # fetch latency metrics for these sessions
+            rows2 = await conn.fetch(
+                "SELECT session_id, component, duration_ms, timestamp FROM latency_metric WHERE session_id = ANY($1::text[]) ORDER BY timestamp DESC LIMIT $2",
+                sessions,
+                limit,
+            )
+
+            await conn.close()
+
+            metrics = [
+                {
+                    "session_id": r["session_id"],
+                    "component": r["component"],
+                    "duration_ms": float(r["duration_ms"]),
+                    "timestamp": str(r["timestamp"]),
+                }
+                for r in rows2
+            ]
+
+            return {"success": True, "data": metrics}
+
+        except Exception:
+            raise HTTPException(
+                status_code=500,
+                detail="Error fetching latency stats"
+            )
 
 
 # =========================
