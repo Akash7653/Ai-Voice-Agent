@@ -27,3 +27,6 @@ google-generativeai
 ctranslate2
 onnxruntime
 av
+
+pytest==7.4.3
+pytest-asyncio==0.21.1

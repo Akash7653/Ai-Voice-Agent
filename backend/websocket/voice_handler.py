@@ -416,25 +416,7 @@ class VoiceAgentWebSocketHandler:
         # default: no action
         return ({"success": False, "error": "no_action", "intent": intent}, None)
 
-                        except Exception as e:
-
-                            logger.exception(
-                                "[PIPELINE ERROR]"
-                            )
-
-                            await websocket.send_json({
-                                "type": "error",
-                                "message": str(e)
-                            })
-
-                        finally:
-
-                            if os.path.exists(temp_audio_path):
-                                os.remove(temp_audio_path)
-
-                            audio_chunks = bytearray()
-
-        except WebSocketDisconnect:
+    except WebSocketDisconnect:
 
             logger.info("[WebSocket] Disconnected")
 
