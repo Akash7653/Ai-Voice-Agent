@@ -173,9 +173,9 @@ async def websocket_voice_endpoint(
             f"WebSocket connected for patient: {patient_id}"
         )
 
-       handler = VoiceAgentWebSocketHandler(
-       db_session=db
-      )
+        handler = VoiceAgentWebSocketHandler(
+            db_session=db
+        )
 
         await handler.handle(
             websocket,
@@ -254,7 +254,7 @@ async def get_patient_info(
         result = await db.execute(
             select(PatientMemory).where(
                 PatientMemory.patient_id == patient_id
-            )
+            )@
         )
 
         patient = result.scalar_one_or_none()
