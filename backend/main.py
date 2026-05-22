@@ -275,6 +275,17 @@ async def get_latency_stats(
         logger.error(f"Error fetching latency stats: {e}")
         return {"success": True, "data": empty_stats}
 
+
+
+@app.get("/")
+async def root():
+    return {
+        "status": "success",
+        "message": "Backend is running successfully 🚀",
+        "service": "Voice AI Healthcare Agent"
+    }
+
+
 # Error handlers
 @app.exception_handler(Exception)
 async def general_exception_handler(request, exc):
@@ -283,23 +294,3 @@ async def general_exception_handler(request, exc):
         "success": False,
         "error": "Internal server error"
     }
-
-@app.get("/")
-async def root():
-    return {"message": "Voice AI Healthcare Agent Running"} 
-
-if __name__ == "__main__":
-    import uvicorn
-    
-    host = os.getenv("API_HOST", "0.0.0.0")
-    port = int(os.getenv("API_PORT", 8000))
-    
-    uvicorn.run(
-        "main:app",
-        host=host,
-        port=port,
-        reload=os.getenv("DEBUG", "False").lower() == "true",
-        log_level=os.getenv("LOG_LEVEL", "info").lower()
-    )
-
-    
