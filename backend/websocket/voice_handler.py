@@ -35,7 +35,7 @@ class VoiceAgentWebSocketHandler:
         session_id = str(uuid.uuid4())
         latency_tracker = LatencyTracker(session_id)
         
-        await websocket.accept()
+        
         
         try:
             # Initialize session in Redis
