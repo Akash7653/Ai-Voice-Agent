@@ -70,11 +70,8 @@ async def websocket_voice_endpoint(websocket: WebSocket, patient_id: str, db: As
     WebSocket endpoint for voice interaction
     Path: /ws/voice/{patient_id}
     """
-   await websocket.accept()
-
-handler = VoiceAgentWebSocketHandler(db_session=db)
-
-await handler.handle_connection(
+    handler = VoiceAgentWebSocketHandler(db_session=db)
+    await handler.handle_connection(
     websocket,
     patient_id
 )
