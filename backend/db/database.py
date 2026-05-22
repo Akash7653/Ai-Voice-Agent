@@ -18,7 +18,6 @@ DATABASE_URL = os.getenv(
     "postgresql+asyncpg://voice_user:voice_password@localhost:5432/voice_agent_db"
 )
 
-# Convert sync URL to async if needed
 if DATABASE_URL.startswith("postgresql://"):
     DATABASE_URL = DATABASE_URL.replace(
         "postgresql://",
