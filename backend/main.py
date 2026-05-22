@@ -284,6 +284,10 @@ async def general_exception_handler(request, exc):
         "error": "Internal server error"
     }
 
+   @app.get("/")
+async def root():
+    return {"message": "Voice AI Healthcare Agent Running"} 
+
 if __name__ == "__main__":
     import uvicorn
     
@@ -291,9 +295,11 @@ if __name__ == "__main__":
     port = int(os.getenv("API_PORT", 8000))
     
     uvicorn.run(
-        "backend.main:app",
+        "main:app",
         host=host,
         port=port,
         reload=os.getenv("DEBUG", "False").lower() == "true",
         log_level=os.getenv("LOG_LEVEL", "info").lower()
     )
+
+    
