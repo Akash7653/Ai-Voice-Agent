@@ -227,10 +227,39 @@ async def get_appointments(
 
         logger.error(f"Error fetching appointments: {e}")
 
-        raise HTTPException(
-            status_code=500,
-            detail="Error fetching appointments"
-        )
+        # Fallback for asyncpg DuplicatePreparedStatementError when using pgbouncer
+        try:
+            import asyncpg
+            from db.database import DATABASE_URL
+
+            logger.info("Attempting fallback query via asyncpg with statement_cache_size=0")
+
+            conn = await asyncpg.connect(DATABASE_URL, statement_cache_size=0)
+            rows = await conn.fetch(
+                "SELECT id, patient_id, doctor_name, specialty, appointment_date, appointment_time, status FROM appointments WHERE patient_id = $1",
+                patient_id,
+            )
+            await conn.close()
+
+            appts = []
+            for r in rows:
+                appts.append({
+                    "id": str(r["id"]),
+                    "patient_id": r["patient_id"],
+                    "doctor_name": r["doctor_name"],
+                    "specialty": r["specialty"],
+                    "appointment_date": r["appointment_date"],
+                    "appointment_time": r["appointment_time"],
+                    "status": r["status"].value if hasattr(r["status"], "value") else r["status"],
+                })
+
+            return {"success": True, "data": appts}
+
+        except Exception:
+            raise HTTPException(
+                status_code=500,
+                detail="Error fetching appointments"
+            )
 
 
 # =========================

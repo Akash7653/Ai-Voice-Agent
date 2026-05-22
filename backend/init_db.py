@@ -24,7 +24,7 @@ DATABASE_URL = os.getenv(
 async def init_db():
     """Create all tables"""
     print("[DB] Creating tables...")
-    engine = create_async_engine(DATABASE_URL, echo=False)
+    engine = create_async_engine(DATABASE_URL, echo=False, connect_args={"statement_cache_size": 0})
 
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
@@ -37,7 +37,7 @@ async def seed_doctors():
     """Seed sample doctor data"""
     print("[DB] Seeding doctors...")
 
-    engine = create_async_engine(DATABASE_URL, echo=False)
+    engine = create_async_engine(DATABASE_URL, echo=False, connect_args={"statement_cache_size": 0})
     async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 
     sample_doctors = [
@@ -117,7 +117,7 @@ async def seed_patients():
     """Seed sample patient data"""
     print("[DB] Seeding patients...")
 
-    engine = create_async_engine(DATABASE_URL, echo=False)
+    engine = create_async_engine(DATABASE_URL, echo=False, connect_args={"statement_cache_size": 0})
     async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 
     sample_patients = [
