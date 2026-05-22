@@ -415,16 +415,3 @@ class VoiceAgentWebSocketHandler:
 
         # default: no action
         return ({"success": False, "error": "no_action", "intent": intent}, None)
-
-    except WebSocketDisconnect:
-
-            logger.info("[WebSocket] Disconnected")
-
-        except Exception as e:
-
-            logger.exception("[WebSocket ERROR]")
-
-            try:
-                await websocket.close()
-            except:
-                pass
