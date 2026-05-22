@@ -49,7 +49,9 @@ from memory.session_memory import (
 
 from services.stt_service import STTService
 from services.tts_service import TTSService
-from services.llm_service import LLMService
+from agent.orchestrator.llm_orchestrator import (
+    LLMService
+)
 
 
 # =========================
