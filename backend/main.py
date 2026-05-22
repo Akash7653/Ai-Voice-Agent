@@ -50,7 +50,7 @@ from memory.session_memory import (
 from services.stt_service import STTService
 from services.tts_service import TTSService
 from agent.orchestrator.llm_orchestrator import (
-    LLMService
+    LLMOrchestrator
 )
 
 
@@ -173,14 +173,11 @@ async def websocket_voice_endpoint(
             f"WebSocket connected for patient: {patient_id}"
         )
 
-        handler = VoiceAgentWebSocketHandler(
-            db_session=db,
-            stt_service=stt_service,
-            tts_service=tts_service,
-            llm_service=llm_service,
-        )
+       handler = VoiceAgentWebSocketHandler(
+       db_session=db
+      )
 
-        await handler.handle_connection(
+        await handler.handle(
             websocket,
             patient_id
         )
