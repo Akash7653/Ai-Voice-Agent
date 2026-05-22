@@ -18,9 +18,7 @@ from services.language_detection import (
     LanguageDetectionService,
 )
 
-from agent.orchestrator.llm_orchestrator import (
-    LLMOrchestrator,
-)
+from agent.orchestrator.llm_orchestrator import LLMService
 
 from memory.session_memory import (
     RedisMemoryManager,
@@ -51,11 +49,7 @@ class VoiceAgentWebSocketHandler:
             LanguageDetectionService()
         )
 
-        self.orchestrator = (
-            LLMOrchestrator(
-                db_session=db_session
-            )
-        )
+        self.orchestrator = LLMService()
 
         self.redis_memory = (
             RedisMemoryManager()
